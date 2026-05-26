@@ -70,6 +70,16 @@ export async function saveAnalysis(userId, jobDescription, experienceSummary, re
   });
 
   if (error) throw new Error(error.message || "Failed to save analysis");
+
+  if (typeof pendo !== "undefined") {
+    pendo.track("analysis_saved", {
+      userId,
+      fitScore: result.fitScore,
+      tag: inferTag(result),
+      targetRole: result?.targetRole,
+      targetCompany: result?.targetCompany,
+    });
+  }
 }
 
 function inferTag(result) {

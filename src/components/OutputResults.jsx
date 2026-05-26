@@ -19,6 +19,13 @@ export default function OutputResults({ data, analysisId }) {
       await navigator.clipboard.writeText(editedLetter);
       setCopied(true);
       toast.success("Cover letter copied to clipboard!");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("cover_letter_copied", {
+          letterLength: editedLetter.length,
+          wasEdited: editedLetter !== (data?.coverLetter ?? ""),
+        });
+      }
       if (copiedTimeoutRef.current) clearTimeout(copiedTimeoutRef.current);
       copiedTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -41,6 +48,13 @@ export default function OutputResults({ data, analysisId }) {
       await updateCoverLetter(activeId, editedLetter);
       setIsEditingLetter(false);
       toast.success("Cover letter draft saved");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("cover_letter_draft_saved", {
+          analysisId: activeId,
+          letterLength: editedLetter.length,
+        });
+      }
     } catch (error) {
       toast.error(error.message || "Failed to save cover letter");
     }
@@ -90,6 +104,15 @@ export default function OutputResults({ data, analysisId }) {
       const safeName = target.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 50) || "cover_letter";
       doc.save(`${safeName}.pdf`);
       toast.success("Cover letter downloaded as PDF");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("cover_letter_downloaded", {
+          targetRole: data?.targetRole,
+          targetCompany: data?.targetCompany,
+          letterLength: editedLetter.length,
+          wasEdited: editedLetter !== (data?.coverLetter ?? ""),
+        });
+      }
     } catch (error) {
       console.error("PDF generation error:", error);
       toast.error("Failed to generate PDF");

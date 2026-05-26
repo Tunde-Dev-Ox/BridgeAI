@@ -82,6 +82,13 @@ export default function AuthModal({ onClose }) {
       });
       if (error) throw error;
       toast.success("Magic link sent! Check your email inbox.");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("magic_link_requested", {
+          emailDomain: email.split("@")[1] || "unknown",
+        });
+      }
+
       onClose();
       setEmail("");
     } catch (error) {

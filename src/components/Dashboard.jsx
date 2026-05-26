@@ -63,9 +63,36 @@ export default function Dashboard() {
 
       setAnalysisResult(result);
       toast.success("Analysis complete!");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("analysis_completed", {
+          fitScore: result?.fitScore,
+          tag: result?.targetRole && result?.targetCompany
+            ? [result.targetRole, result.targetCompany].join(" ").toLowerCase().includes("design") ? "PRODUCT DESIGN" : "PRODUCT"
+            : undefined,
+          targetRole: result?.targetRole,
+          targetCompany: result?.targetCompany,
+          fitBreakdownCount: result?.fitBreakdown?.length ?? 0,
+          translationsCount: result?.translations?.length ?? 0,
+          gapAnalysisCount: result?.gapAnalysis?.length ?? 0,
+          hasCoverLetter: !!result?.coverLetter,
+          isAuthenticated: !!user,
+          jobDescriptionLength: jobDescription.length,
+          experienceSummaryLength: experienceSummary.length,
+        });
+      }
     } catch (error) {
       console.error("Analysis error:", error);
       toast.error(error.message || "Analysis failed. Please try again.");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("analysis_failed", {
+          errorMessage: (error.message || "Unknown error").substring(0, 100),
+          jobDescriptionLength: jobDescription.length,
+          experienceSummaryLength: experienceSummary.length,
+          isAuthenticated: !!user,
+        });
+      }
     } finally {
       setIsAnalyzing(false);
     }

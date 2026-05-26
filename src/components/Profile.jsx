@@ -210,6 +210,14 @@ export default function Profile() {
         if (upsertError) throw upsertError;
 
         toast.success("Avatar uploaded successfully!", { id: toastId });
+
+        if (typeof pendo !== "undefined") {
+          pendo.track("avatar_uploaded", {
+            fileType: file.type,
+            fileSizeBytes: file.size,
+            fileExtension: file.name.split('.').pop(),
+          });
+        }
       } catch (error) {
         console.error("Avatar upload error:", error);
         toast.error("Failed to upload avatar", { id: toastId });
@@ -255,6 +263,19 @@ export default function Profile() {
 
         if (error) throw error;
         toast.success("Profile saved successfully!");
+
+        if (typeof pendo !== "undefined") {
+          pendo.track("profile_saved", {
+            hasAvatar: !!avatarUrl,
+            roleTitle: profileData.role_title,
+            targetRegion: profileData.target_region,
+            skillsCount: skills.length,
+            weeklyEmailEnabled: weeklyEmail,
+            aiModel,
+            hasFirstName: !!profileData.first_name,
+            hasLastName: !!profileData.last_name,
+          });
+        }
       } catch (error) {
         console.error("Error saving profile:", error);
         toast.error(error.message || "Failed to save profile");

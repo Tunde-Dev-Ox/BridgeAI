@@ -30,6 +30,16 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
       }
       appendText(text);
       toast.success(`Extracted ${text.split(/\s+/).length} words from ${file.name}`);
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("file_uploaded", {
+          fileType: file.type,
+          fileName: file.name,
+          wordCount: text.split(/\s+/).length,
+          fieldTarget: title,
+          fileSizeBytes: file.size,
+        });
+      }
     } catch (error) {
       toast.error(error.message || "Failed to extract text from file");
     } finally {
@@ -47,6 +57,13 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
       }
       appendText(text);
       toast.success(`Pasted ${text.split(/\s+/).length} words from clipboard`);
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("clipboard_pasted", {
+          wordCount: text.split(/\s+/).length,
+          fieldTarget: title,
+        });
+      }
     } catch (error) {
       if (error.name === "NotAllowedError") {
         toast.error("Allow clipboard access in your browser settings");
@@ -74,6 +91,15 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
       const prefix = title ? `[Source: ${title}](${url})\n\n` : "";
       appendText(prefix + text);
       toast.success(`Fetched ${text.split(/\s+/).length} words from URL`);
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("url_content_fetched", {
+          url,
+          wordCount: text.split(/\s+/).length,
+          hasTitle: !!title,
+          fieldTarget: title,
+        });
+      }
       setShowUrlInput(false);
       setUrlValue("");
     } catch (error) {

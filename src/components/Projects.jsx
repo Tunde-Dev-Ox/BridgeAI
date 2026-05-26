@@ -85,6 +85,13 @@ export default function Projects() {
     searchTimerRef.current = setTimeout(() => {
       setPage(0);
       loadAnalyses(0, activeFilter, value);
+
+      if (value && typeof pendo !== "undefined") {
+        pendo.track("analysis_history_searched", {
+          searchQuery: value.substring(0, 100),
+          activeFilter,
+        });
+      }
     }, 350);
   };
 
@@ -107,6 +114,13 @@ export default function Projects() {
       setAnalyses((prev) => prev.filter((a) => a.id !== deleteTarget));
       setDeleteTarget(null);
       toast.success("Analysis deleted");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("analysis_deleted", {
+          analysisId: deleteTarget,
+          deletedFromDetailView: !!id,
+        });
+      }
       if (id === deleteTarget) {
         navigate("/projects", { replace: true });
       }
