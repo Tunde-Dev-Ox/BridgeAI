@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import Sidebar from "./Sidebar";
 import ChatForm from "./ChatForm";
@@ -8,6 +8,7 @@ import { runAnalysis, saveAnalysis } from "../services/analysis";
 import OnboardingTour from "./OnboardingTour";
 import AnalysisLoading from "./AnalysisLoading";
 
+const PENDO_AGENT_ID = "cFm4fdPaDGg-2RbJnN1mPQX3BkU";
 
 export default function Dashboard() {
   const { user } = useAuthModal();
@@ -15,6 +16,8 @@ export default function Dashboard() {
   const [experienceSummary, setExperienceSummary] = useState("");
   const [analysisResult, setAnalysisResult] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const conversationIdRef = useRef(crypto.randomUUID());
+  const lastPromptMessageIdRef = useRef(null);
 
 
   const handleRunAnalysis = async () => {
@@ -28,8 +31,29 @@ export default function Dashboard() {
     setIsAnalyzing(true);
     setAnalysisResult(null);
 
+    const promptMessageId = crypto.randomUUID();
+    lastPromptMessageIdRef.current = promptMessageId;
+
+    if (typeof window !== "undefined" && window.pendo && window.pendo.trackAgent) {
+      window.pendo.trackAgent("prompt", {
+        agentId: PENDO_AGENT_ID,
+        conversationId: conversationIdRef.current,
+        messageId: promptMessageId,
+        content: `Job Description: ${jobDescription}\n\nExperience Summary: ${experienceSummary}`,
+      });
+    }
+
     try {
       const result = await runAnalysis(jobDescription, experienceSummary);
+
+      if (typeof window !== "undefined" && window.pendo && window.pendo.trackAgent) {
+        window.pendo.trackAgent("agent_response", {
+          agentId: PENDO_AGENT_ID,
+          conversationId: conversationIdRef.current,
+          messageId: crypto.randomUUID(),
+          content: JSON.stringify(result),
+        });
+      }
 
       if (user) {
         saveAnalysis(user.id, jobDescription, experienceSummary, result).catch((err) => {
@@ -75,9 +99,20 @@ export default function Dashboard() {
   };
 
   const handleNew = () => {
+    if (typeof window !== "undefined" && window.pendo && window.pendo.trackAgent && lastPromptMessageIdRef.current) {
+      window.pendo.trackAgent("user_reaction", {
+        agentId: PENDO_AGENT_ID,
+        conversationId: conversationIdRef.current,
+        messageId: lastPromptMessageIdRef.current,
+        content: "retry",
+      });
+    }
+
     setAnalysisResult(null);
     setJobDescription("");
     setExperienceSummary("");
+    conversationIdRef.current = crypto.randomUUID();
+    lastPromptMessageIdRef.current = null;
   };
 
   return (

@@ -36,25 +36,53 @@ export function AuthModalProvider({ children }) {
       (event, session) => {
         if (event === 'SIGNED_OUT') {
           setUser(null);
+          pendo.clearSession();
         } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-          setUser(session?.user ?? null);
+          const currentUser = session?.user ?? null;
+          setUser(currentUser);
 
-          if (event === 'SIGNED_IN' && session?.user && typeof pendo !== "undefined") {
-            const authMethod = session.user.app_metadata?.provider || "unknown";
-            const emailDomain = session.user.email?.split("@")[1] || "unknown";
-            const isNewUser = session.user.created_at === session.user.last_sign_in_at;
+          if (currentUser && typeof pendo !== "undefined") {
+            supabase
+              .from("profiles")
+              .select("*")
+              .eq("id", currentUser.id)
+              .single()
+              .then(({ data: profile }) => {
+                pendo.identify({
+                  visitor: {
+                    id: currentUser.id,
+                    email: currentUser.email,
+                    full_name: [profile?.first_name, profile?.last_name].filter(Boolean).join(' '),
+                    first_name: profile?.first_name ?? '',
+                    last_name: profile?.last_name ?? '',
+                    avatar_url: profile?.avatar_url ?? '',
+                    role_title: profile?.role_title ?? '',
+                    role_title_meta: profile?.role_title_meta ?? '',
+                    target_region: profile?.target_region ?? '',
+                    target_region_meta: profile?.target_region_meta ?? '',
+                    skills: profile?.skills ?? [],
+                    weekly_email: profile?.weekly_email ?? true,
+                    ai_model: profile?.ai_model ?? '',
+                    updated_at: profile?.updated_at ?? '',
+                  }
+                });
 
-            if (isNewUser) {
-              pendo.track("user_signed_up", {
-                authMethod,
-                emailDomain,
+                if (event === 'SIGNED_IN') {
+                  const authMethod = currentUser.app_metadata?.provider || "unknown";
+                  const emailDomain = currentUser.email?.split("@")[1] || "unknown";
+                  const isNewUser = currentUser.created_at === currentUser.last_sign_in_at;
+                  pendo.track(isNewUser ? "user_signed_up" : "user_signed_in", { authMethod, emailDomain });
+                }
+              })
+              .catch((err) => {
+                console.error("Failed to load profile for Pendo:", err);
+                pendo.identify({ visitor: { id: currentUser.id, email: currentUser.email } });
+                if (event === 'SIGNED_IN') {
+                  const authMethod = currentUser.app_metadata?.provider || "unknown";
+                  const isNewUser = currentUser.created_at === currentUser.last_sign_in_at;
+                  pendo.track(isNewUser ? "user_signed_up" : "user_signed_in", { authMethod });
+                }
               });
-            } else {
-              pendo.track("user_signed_in", {
-                authMethod,
-                emailDomain,
-              });
-            }
           }
         } else {
           setUser(session?.user ?? null);
