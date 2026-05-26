@@ -87,7 +87,7 @@ export function AuthModalProvider({ children }) {
         } else {
           setUser(session?.user ?? null);
         }
-        
+
         setLoading(false);
         if (session) {
           closeAuthModal();
@@ -103,6 +103,11 @@ export function AuthModalProvider({ children }) {
   const signOut = async () => {
     try {
       setLoading(true);
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("user_signed_out");
+      }
+
       await supabase.auth.signOut();
     } catch (error) {
       console.error("Error signing out:", error);
