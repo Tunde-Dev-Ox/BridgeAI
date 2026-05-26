@@ -57,6 +57,16 @@ export default function FeedbackModal({ onClose }) {
         email: user?.email || undefined,
       });
       toast.success("Feedback sent! Thanks for helping improve Bridge.");
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("feedback_submitted", {
+          feedbackType: type,
+          subjectLength: subject.trim().length,
+          messageLength: message.trim().length,
+          hasEmail: !!user?.email,
+        });
+      }
+
       onClose();
     } catch (error) {
       toast.error(error.message || "Failed to send feedback");

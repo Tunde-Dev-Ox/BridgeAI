@@ -68,15 +68,30 @@ function useTourProgress() {
   });
 
   const dismiss = useCallback(() => {
+    if (typeof pendo !== "undefined") {
+      pendo.track("onboarding_dismissed", {
+        dismissedAtStep: step,
+        dismissedAtStepId: STEPS[step]?.id,
+        totalSteps: STEPS.length,
+      });
+    }
+
     localStorage.setItem(TOUR_STORAGE_KEY, "true");
     setStep(-1);
-  }, []);
+  }, [step]);
 
   const next = useCallback(() => {
     setStep((s) => {
       const nextStep = s + 1;
       if (nextStep >= STEPS.length) {
         localStorage.setItem(TOUR_STORAGE_KEY, "true");
+
+        if (typeof pendo !== "undefined") {
+          pendo.track("onboarding_completed", {
+            totalSteps: STEPS.length,
+          });
+        }
+
         return -1;
       }
       return nextStep;

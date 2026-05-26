@@ -38,10 +38,28 @@ export function AuthModalProvider({ children }) {
           setUser(null);
         } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
           setUser(session?.user ?? null);
+
+          if (event === 'SIGNED_IN' && session?.user && typeof pendo !== "undefined") {
+            const authMethod = session.user.app_metadata?.provider || "unknown";
+            const emailDomain = session.user.email?.split("@")[1] || "unknown";
+            const isNewUser = session.user.created_at === session.user.last_sign_in_at;
+
+            if (isNewUser) {
+              pendo.track("user_signed_up", {
+                authMethod,
+                emailDomain,
+              });
+            } else {
+              pendo.track("user_signed_in", {
+                authMethod,
+                emailDomain,
+              });
+            }
+          }
         } else {
           setUser(session?.user ?? null);
         }
-        
+
         setLoading(false);
         if (session) {
           closeAuthModal();
@@ -57,6 +75,11 @@ export function AuthModalProvider({ children }) {
   const signOut = async () => {
     try {
       setLoading(true);
+
+      if (typeof pendo !== "undefined") {
+        pendo.track("user_signed_out");
+      }
+
       await supabase.auth.signOut();
     } catch (error) {
       console.error("Error signing out:", error);
