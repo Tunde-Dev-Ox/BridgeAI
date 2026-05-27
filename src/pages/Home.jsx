@@ -181,7 +181,7 @@ export default function Home() {
           <p className="mt-5 text-lg text-zinc-500 max-w-2xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: "0.15s" }}>
             Bridge translates your local market experience into the language global hiring managers immediately understand — so you can compete anywhere.
           </p>
-          <div className="mt-8 flex items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <div className="mt-8 flex items-center justify-center gap-4 animate-fade-in max-[540px]:flex-col" style={{ animationDelay: "0.3s" }}>
             <button
               onClick={openAuthModal}
               className="px-6 py-3 bg-[#111214] text-white font-semibold rounded-xl hover:bg-[#111214]/90 transition-all flex items-center gap-2 text-sm active:scale-[0.97] cursor-pointer"
