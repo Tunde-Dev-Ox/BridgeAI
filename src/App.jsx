@@ -2,11 +2,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
+import GuestRoute from "./components/GuestRoute";
 import AppLayout from "./components/AppLayout";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Profile from "./pages/dashboard/Profile";
 import Projects from "./pages/dashboard/Projects";
 import Privacy from "./pages/Privacy";
+import NotFound from "./pages/NotFound";
 import { AuthModalProvider } from "./context/AuthModalContext";
 import { Toaster } from "sonner";
 import * as Sentry from "@sentry/react";
@@ -29,7 +31,7 @@ function App() {
           }}
         />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<GuestRoute><Home /></GuestRoute>} />
           <Route path="/app" element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
               <Route index element={<Dashboard />} />
@@ -39,6 +41,7 @@ function App() {
             </Route>
           </Route>
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthModalProvider>
     </Router>

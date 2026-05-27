@@ -147,7 +147,7 @@ export default function OutputResults({ data, analysisId }) {
         <div className="flex items-center space-x-3 py-2 px-4 rounded-xl border border-gray-200">
           <div className="relative w-10 h-10 flex items-center justify-center">
             <svg className="w-10 h-10 transform -rotate-90">
-              <circle cx="20" cy="20" r="16" stroke="#fff" strokeWidth="3" fill="transparent" />
+              <circle cx="20" cy="20" r="16" stroke="#e0e0e0" strokeWidth="3" fill="transparent" />
               <circle
                 cx="20"
                 cy="20"
@@ -202,7 +202,7 @@ export default function OutputResults({ data, analysisId }) {
               {/* SVG Radial Progress */}
               <div className="relative w-36 h-36 flex items-center justify-center shrink-0">
                 <svg className="w-36 h-36 transform -rotate-90">
-                  <circle cx="72" cy="72" r="60" stroke="#e0e0e0" strokeWidth="8" fill="transparent" />
+                  <circle cx="72" cy="72" r="60" stroke="#e0e0e0" className="" strokeWidth="8" fill="transparent" />
                   <circle
                     cx="72"
                     cy="72"
@@ -324,7 +324,7 @@ export default function OutputResults({ data, analysisId }) {
               {safeGapAnalysis.map((gap) => (
                 <div key={gap.id} className="p-5 border border-gray-200 rounded-xl transition-colors">
                   <div className="flex items-center justify-between flex-wrap gap-2">
-                    <h5 className="text-base font-semibold text-zinc-750 flex items-center gap-2">
+                    <h5 className="text-base font-semibold text-zinc-700 flex items-center gap-2">
                       <span className="w-1.5 h-5 bg-[#f4330d] rounded-full"></span>
                       {gap.title}
                     </h5>
@@ -359,7 +359,7 @@ export default function OutputResults({ data, analysisId }) {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={isEditingLetter ? handleSaveDraft : () => setIsEditingLetter(true)}
-                  className="flex items-center space-x-1.5 py-1 px-3 bg-[fff] hover:bg-zinc-100 border border-gray-200 hover:border-gray-300 rounded-lg text-xs font-medium text-zinc-800 transition-colors cursor-pointer"
+                  className="flex items-center space-x-1.5 py-1 px-3 bg-white hover:bg-zinc-100 border border-gray-200 hover:border-gray-300 rounded-lg text-xs font-medium text-zinc-800 transition-colors cursor-pointer"
                 >
                   {isEditingLetter ? (
                     <>

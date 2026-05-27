@@ -23,7 +23,6 @@ export default function Sidebar({ onClick, onNew }) {
 
   useEffect(() => {
     if (!user) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setImgError(false);
 
     const metadataUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
@@ -62,7 +61,9 @@ export default function Sidebar({ onClick, onNew }) {
       : "flex items-center px-2 py-2 rounded-lg font-medium transition-colors cursor-pointer";
     const activeClass = mobile
       ? active ? "text-[#f4330d]" : "text-zinc-500"
-      : active ? "bg-gray-200 text-gray-900" : "bg-transparent text-gray-700 hover:bg-gray-200/50 hover:text-gray-900";
+      : active
+        ? "bg-gray-200 text-gray-900"
+        : "bg-transparent text-gray-700 hover:bg-gray-200/50 hover:text-gray-900";
 
     return (
       <Link
@@ -82,22 +83,22 @@ export default function Sidebar({ onClick, onNew }) {
     <>
       {/* Desktop sidebar */}
       <div className="hidden md:flex w-48 bg-[#f5f5f5] h-screen p-6 pb-4 flex-col overflow-hidden border-r border-gray-300">
-        <Link to="/" className="text-2xl font-bold mb-6 font-cabinet bg-[#f4330d] text-white w-fit p-1 block">Bridge.</Link>
+        <Link to="/app" className="text-2xl font-bold mb-6 font-cabinet bg-[#f4330d] text-white w-fit p-1 block">Bridge.</Link>
         <nav className="space-y-2" role="navigation" aria-label="Main navigation">
           {NAV_ITEMS.map((item) => (
             <NavLink key={item.path} item={item} />
           ))}
         </nav>
-        <div className="mt-auto border-t border-gray-300 pt-4">
+        <div className="mt-auto border-t border-gray-300 pt-4 space-y-1">
           <button
             onClick={openFeedbackModal}
-            className="w-full flex items-center px-2 py-2 mb-1 text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50 rounded-lg transition-colors cursor-pointer"
+            className="w-full flex items-center px-2 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/50 rounded-lg transition-colors cursor-pointer"
           >
             <FiMessageSquare className="mr-2 text-zinc-500" />
             <span>Feedback</span>
           </button>
           {user ? (
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 pt-1">
               <div className="flex items-center space-x-2 px-1 py-1">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden bg-[#f4330d] text-white">
                   {profileAvatar && !imgError ? (
@@ -159,7 +160,7 @@ export default function Sidebar({ onClick, onNew }) {
               className="flex flex-col items-center gap-0.5 text-[10px] font-semibold transition-colors cursor-pointer py-1 px-2 rounded-lg text-zinc-500 hover:text-red-600"
               aria-label="Sign out"
             >
-              <div className="w-5 h-5 rounded-full bg-zinc-300 flex items-center justify-center text-[10px] font-bold text-white shrink-0 overflow-hidden">
+                <div className="w-5 h-5 rounded-full bg-zinc-300 flex items-center justify-center text-[10px] font-bold text-white shrink-0 overflow-hidden">
                 {profileAvatar && !imgError ? (
                   <img src={profileAvatar} alt="" className="w-full h-full object-cover" />
                 ) : (

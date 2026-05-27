@@ -10,7 +10,6 @@ export function AuthModalProvider({ children }) {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
   const openFeedbackModal = () => setIsFeedbackModalOpen(true);
@@ -147,6 +146,7 @@ export function useAuthModal() {
       loading: false,
       openAuthModal: () => {},
       closeAuthModal: () => {},
+
       signOut: () => {},
     }
   );

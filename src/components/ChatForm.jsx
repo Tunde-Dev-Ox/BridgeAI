@@ -109,6 +109,13 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && onRun && value.trim()) {
+      e.preventDefault();
+      onRun();
+    }
+  };
+
   const handleUrlKeyDown = (e) => {
     if (e.key === "Enter" && !isFetching) {
       handleFetchUrl();
@@ -126,6 +133,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
         <textarea
           value={value}
           onChange={(event) => onChange(event.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           data-tour={title === "Job Description" ? "jd-form" : title === "Experience Summary" ? "exp-form" : undefined}
           className="mt-4 min-h-10 flex-1 resize-none border-0 bg-transparent p-0 text-base leading-7 text-zinc-500 outline-none placeholder:text-base placeholder:font-normal placeholder:leading-snug placeholder:text-zinc-500 focus:ring-0"
