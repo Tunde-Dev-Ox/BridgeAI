@@ -106,7 +106,7 @@ export default function Privacy() {
     <div className="min-h-screen bg-white text-zinc-900">
       <div className="max-w-3xl mx-auto px-6 py-12">
         <Link
-          to="/"
+          to="/app"
           className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-800 transition-colors mb-8 w-fit"
         >
           <FiArrowLeft className="w-4 h-4" />

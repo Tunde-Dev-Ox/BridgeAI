@@ -9,9 +9,9 @@ import { useAuthModal } from "../context/AuthModalContext";
 import { supabase } from "../supabaseClient";
 
 const NAV_ITEMS = [
-  { path: "/", label: "New", icon: TfiPlus, authRequired: false },
-  { path: "/projects", label: "History", icon: VscHistory, authRequired: true, tour: "sidebar-history" },
-  { path: "/profile", label: "Profile", icon: FiUserCheck, authRequired: true },
+  { path: "/app", label: "New", icon: TfiPlus, authRequired: false },
+  { path: "/app/projects", label: "History", icon: VscHistory, authRequired: true, tour: "sidebar-history" },
+  { path: "/app/profile", label: "Profile", icon: FiUserCheck, authRequired: true },
 ];
 
 export default function Sidebar({ onClick, onNew }) {
@@ -49,7 +49,7 @@ export default function Sidebar({ onClick, onNew }) {
       openAuthModal();
       return;
     }
-    if (item.path === "/" && onNew) {
+    if (item.path === "/app" && onNew) {
       onNew();
     }
   };
@@ -82,7 +82,7 @@ export default function Sidebar({ onClick, onNew }) {
     <>
       {/* Desktop sidebar */}
       <div className="hidden md:flex w-48 bg-[#f5f5f5] h-screen p-6 pb-4 flex-col overflow-hidden border-r border-gray-300">
-        <h2 className="text-2xl font-bold mb-6 font-cabinet bg-[#f4330d] text-white w-fit p-1">Bridge.</h2>
+        <Link to="/" className="text-2xl font-bold mb-6 font-cabinet bg-[#f4330d] text-white w-fit p-1 block">Bridge.</Link>
         <nav className="space-y-2" role="navigation" aria-label="Main navigation">
           {NAV_ITEMS.map((item) => (
             <NavLink key={item.path} item={item} />
@@ -140,10 +140,45 @@ export default function Sidebar({ onClick, onNew }) {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 flex items-center justify-around px-2 py-1.5" role="navigation" aria-label="Mobile navigation">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 flex items-center justify-around px-1 py-1" role="navigation" aria-label="Mobile navigation">
         {NAV_ITEMS.map((item) => (
           <NavLink key={item.path} item={item} mobile />
         ))}
+        {user ? (
+          <>
+            <button
+              onClick={openFeedbackModal}
+              className="flex flex-col items-center gap-0.5 text-[10px] font-semibold transition-colors cursor-pointer py-1 px-2 rounded-lg text-zinc-500 hover:text-zinc-900"
+              aria-label="Send feedback"
+            >
+              <FiMessageSquare className="text-lg" />
+              <span>Feedback</span>
+            </button>
+            <button
+              onClick={signOut}
+              className="flex flex-col items-center gap-0.5 text-[10px] font-semibold transition-colors cursor-pointer py-1 px-2 rounded-lg text-zinc-500 hover:text-red-600"
+              aria-label="Sign out"
+            >
+              <div className="w-5 h-5 rounded-full bg-zinc-300 flex items-center justify-center text-[10px] font-bold text-white shrink-0 overflow-hidden">
+                {profileAvatar && !imgError ? (
+                  <img src={profileAvatar} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  (user.email?.trim()[0]?.toUpperCase() || "U")
+                )}
+              </div>
+              <span>Sign Out</span>
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={onClick ?? openAuthModal}
+            className="flex flex-col items-center gap-0.5 text-[10px] font-semibold transition-colors cursor-pointer py-1 px-2 rounded-lg text-zinc-500 hover:text-zinc-900"
+            aria-label="Sign in"
+          >
+            <FaUserCircle className="text-lg text-[#f4330d]" />
+            <span>Sign In</span>
+          </button>
+        )}
       </nav>
     </>
   );
