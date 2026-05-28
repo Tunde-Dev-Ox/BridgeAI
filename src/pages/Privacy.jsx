@@ -6,7 +6,7 @@ const sections = [
     icon: FiFileText,
     title: "Information We Collect",
     content: [
-      "We collect the following categories of information to provide the Bridge service:",
+      "We collect the following categories of information to provide the Goover service:",
       "Account Information: When you sign up, we collect your email address and any profile details you provide (name, job title, target region, skills).",
       "Content You Submit: This includes job descriptions you paste or upload, your resume or experience summaries, files you attach (.pdf, .docx, .txt), and any URLs you ask us to fetch.",
       "Usage Data: We collect anonymized information about how you interact with the app (feature usage, page views) to improve the product. This cannot be traced back to you personally.",
@@ -16,8 +16,8 @@ const sections = [
     icon: FiCpu,
     title: "How We Use Your Information",
     content: [
-      "We use your information solely to deliver and improve the Bridge service:",
-      "Core Analysis: Job descriptions and experience summaries are sent to Google Gemini (our AI provider) to generate fit analyses, gap assessments, cover letters, and translation reports.",
+      "We use your information solely to deliver and improve the Goover service:",
+      "Core Analysis: Job descriptions and experience summaries are sent to our AI provider to generate fit analyses, gap assessments, cover letters, and translation reports.",
       "Account Management: Your email and profile data are used to authenticate you, save your analysis history, and personalize your experience.",
       "Product Improvement: Aggregated, anonymized usage data helps us understand which features to build next.",
     ],
@@ -26,10 +26,9 @@ const sections = [
     icon: FiShield,
     title: "AI Processing & Data Handling",
     content: [
-      "Bridge uses Google Gemini (gemini-2.5-flash and fallback models) to analyze your content. Here's how your data is handled:",
-      "Transmission: Resume and job description text is sent to Google's API solely for the duration of the analysis request. Google does not use this data to train their models.",
-      "No Persistent Storage: Google does not retain your content after the API response is returned.",
-      "Caching: Analysis results are saved in your private Supabase store so you can revisit them later. You can delete any analysis at any time.",
+      "Goover uses AI to analyze your content. Here's how your data is handled:",
+      "Transmission: Resume and job description text is sent to our AI provider for the duration of the analysis request. Our AI provider does not use this data to train their models.",
+      "Caching: Analysis results are saved in your private database so you can revisit them later. You can delete any analysis at any time.",
     ],
   },
   {
@@ -56,10 +55,11 @@ const sections = [
     icon: FiUsers,
     title: "Third-Party Services",
     content: [
-      "Bridge relies on the following third-party services to function. Each has its own privacy policy governing data handling:",
+      "Goover relies on the following third-party services to function. Each has its own privacy policy governing data handling:",
       "Supabase (supabase.com) — Authentication, database, and file storage.",
-      "Google Gemini (cloud.google.com) — AI-powered resume analysis.",
+      "Claude (claude.ai) — The AI language model that powers Goover.",
       "Sentry (sentry.io) — Error monitoring and crash reporting (no personal data included).",
+      "Novus (novus.pendo.io) - Tracking users interaction with the app.",
       "We never sell your personal information to any third party.",
     ],
   },
@@ -79,7 +79,7 @@ const sections = [
     icon: FiFileText,
     title: "Cookies",
     content: [
-      "Bridge uses only essential cookies required for authentication (Supabase Auth session tokens). We do not use tracking cookies, advertising cookies, or third-party analytics cookies.",
+      "Goover uses only essential cookies required for authentication (Supabase Auth session tokens). We do not use tracking cookies, advertising cookies, or third-party analytics cookies.",
       "Session tokens are stored in your browser's local storage and are cleared when you sign out.",
     ],
   },
@@ -87,7 +87,7 @@ const sections = [
     icon: FiFileText,
     title: "Changes to This Policy",
     content: [
-      "We may update this privacy policy from time to time. Material changes will be announced via email (if you have an account) or through an in-app notice. Continued use of Bridge after changes take effect constitutes acceptance of the updated policy.",
+      "We may update this privacy policy from time to time. Material changes will be announced via email (if you have an account) or through an in-app notice. Continued use of Goover after changes take effect constitutes acceptance of the updated policy.",
     ],
   },
   {
@@ -95,8 +95,7 @@ const sections = [
     title: "Contact",
     content: [
       "If you have questions, concerns, or requests regarding this privacy policy or your data, please reach out:",
-      "Email: privacy@bridgeapp.com",
-      "You may also open an issue on our project repository.",
+      "Email: support@usegoover.com",
     ],
   },
 ];
@@ -110,7 +109,7 @@ export default function Privacy() {
           className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-800 transition-colors mb-8 w-fit"
         >
           <FiArrowLeft className="w-4 h-4" />
-          <span>Back to Dashboard</span>
+          <span>Back to home</span>
         </Link>
 
         <h1 className="text-3xl font-semibold tracking-tight mb-1 font-cabinet">Privacy Policy</h1>

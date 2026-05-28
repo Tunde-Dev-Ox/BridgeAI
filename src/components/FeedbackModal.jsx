@@ -6,7 +6,7 @@ import { useAuthModal } from "../context/AuthModalContext";
 
 const TYPES = [
   { value: "bug", label: "Bug Report", icon: FiAlertCircle, desc: "Something isn't working right" },
-  { value: "feature", label: "Feature Suggestion", icon: FiStar, desc: "An idea to improve Bridge" },
+  { value: "feature", label: "Feature Suggestion", icon: FiStar, desc: "An idea to improve Goover" },
 ];
 
 export default function FeedbackModal({ onClose }) {
@@ -93,12 +93,9 @@ export default function FeedbackModal({ onClose }) {
       <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl animate-fade-in overflow-hidden">
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-[#f4330d]/10 flex items-center justify-center">
-              <FiMessageSquare className="text-[#f4330d] text-lg" />
-            </div>
             <div>
               <h2 className="text-lg font-semibold text-[#111214]">Send Feedback</h2>
-              <p className="text-xs text-zinc-500">Help us improve Bridge</p>
+              <p className="text-xs text-zinc-500">Help us improve Goover</p>
             </div>
           </div>
           <button
@@ -125,11 +122,11 @@ export default function FeedbackModal({ onClose }) {
                     onClick={() => { setType(t.value); subjectRef.current?.focus(); }}
                     className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                       selected
-                        ? "border-[#f4330d] bg-[#f4330d]/5 ring-1 ring-[#f4330d]/20"
+                        ? "border-brand bg-brand/5 ring-1 ring-brand/20"
                         : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
                   >
-                    <Icon className={`text-lg mb-1.5 ${selected ? "text-[#f4330d]" : "text-zinc-400"}`} />
+                    <Icon className={`text-lg mb-1.5 ${selected ? "text-brand" : "text-zinc-400"}`} />
                     <p className={`text-sm font-semibold ${selected ? "text-[#111214]" : "text-zinc-600"}`}>
                       {t.label}
                     </p>

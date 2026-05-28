@@ -140,11 +140,6 @@ export default function Dashboard() {
       ) : (
         <>
           <div className="relative mb-8 sm:mb-14 text-center max-w-2xl pt-8 sm:pt-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200/50 text-[11px] font-semibold text-zinc-600 tracking-wide mb-6 font-cabinet">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#f4330d] animate-pulse-glow " />
-              Bridge AI
-            </div>
-
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-zinc-950 font-cabinet leading-[1.15] transition-opacity duration-300">
               Let's get that job, shall we?
             </h1>

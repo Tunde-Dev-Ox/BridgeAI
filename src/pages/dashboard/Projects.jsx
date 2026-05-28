@@ -213,7 +213,7 @@ export default function Projects() {
                 placeholder="Search history..."
                 value={searchQuery}
                 onChange={handleSearch}
-                className="w-full py-1.5 pl-9 pr-4 border border-zinc-300 rounded-lg text-sm text-zinc-800 focus:outline-none focus:ring-2 focus:ring-[#f4330d] focus:border-transparent transition-all placeholder-zinc-400 bg-white"
+                className="w-full py-1.5 pl-9 pr-4 border border-gray-200 rounded-lg text-sm text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white"
               />
             </div>
           </div>

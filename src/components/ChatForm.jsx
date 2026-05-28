@@ -155,7 +155,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
               type="button"
               onClick={handleFetchUrl}
               disabled={isFetching}
-              className="grid place-items-center rounded-full bg-[#f4330d] text-white cursor-pointer hover:bg-[#f4330d]/80 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
+              className="grid place-items-center rounded-full bg-brand text-white cursor-pointer hover:bg-brand/80 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
             >
               {isFetching ? (
                 <span className="block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -223,7 +223,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
                 disabled={!value}
                 data-tour="run-btn"
                 aria-label={`Run ${title.toLowerCase()} analysis`}
-                className="grid h-11 w-11 flex-none place-items-center rounded-full border border-zinc-200 bg-[#f4330d] text-white shadow-sm transition-colors hover:border-zinc-300 hover:text-white/80 cursor-pointer active:scale-[0.98] ml-auto disabled:cursor-not-allowed disabled:opacity-50"
+                className="grid h-11 w-11 flex-none place-items-center rounded-full border border-zinc-200 bg-brand text-white shadow-sm transition-colors hover:border-zinc-300 hover:text-white/80 cursor-pointer active:scale-[0.98] ml-auto disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <IoArrowUpSharp className="h-5 w-5" />
               </button>

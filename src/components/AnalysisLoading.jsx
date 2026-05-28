@@ -74,9 +74,9 @@ export default function AnalysisLoading() {
       </svg>
 
       <div className="flex items-center space-x-3 mb-4">
-        <span className="w-2.5 h-2.5 rounded-full bg-[#f4330d] animate-pulse-glow" />
-        <span className="w-2.5 h-2.5 rounded-full bg-[#f4330d] animate-pulse-glow" style={{ animationDelay: "0.3s" }} />
-        <span className="w-2.5 h-2.5 rounded-full bg-[#f4330d] animate-pulse-glow" style={{ animationDelay: "0.6s" }} />
+        <span className="w-2.5 h-2.5 rounded-full bg-brand animate-pulse-glow" />
+        <span className="w-2.5 h-2.5 rounded-full bg-brand animate-pulse-glow" style={{ animationDelay: "0.3s" }} />
+        <span className="w-2.5 h-2.5 rounded-full bg-brand animate-pulse-glow" style={{ animationDelay: "0.6s" }} />
       </div>
       <p className="text-sm text-zinc-500 font-medium animate-pulse-glow" style={{ animationDelay: "0.2s" }}>
         Analyzing your profile...

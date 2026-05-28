@@ -325,12 +325,12 @@ export default function OutputResults({ data, analysisId }) {
                 <div key={gap.id} className="p-5 border border-gray-200 rounded-xl transition-colors">
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <h5 className="text-base font-semibold text-zinc-700 flex items-center gap-2">
-                      <span className="w-1.5 h-5 bg-[#f4330d] rounded-full"></span>
+                      <span className="w-1.5 h-5 bg-brand rounded-full"></span>
                       {gap.title}
                     </h5>
                     <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${gap.impact === "High"
-                      ? "bg-red-500/30 border border-red-500/20 text-red-800"
-                      : "bg-amber-500/10 border border-amber-500/20 text-amber-400"
+                      ? "bg-brand/20 border border-red-500 text-red-500"
+                      : "bg-brand/20 border border-brand/20 text-brand"
                       }`}>
                       {gap.impact} Impact
                     </span>
@@ -352,8 +352,8 @@ export default function OutputResults({ data, analysisId }) {
 
         {/* COVER LETTER TAB */}
         {activeTab === "letter" && (
-          <div className="space-y-4 animate-fade-in">
-            <div className="flex items-center justify-between">
+          <div className="space-y-4 animate-fade-in cover-letter">
+            <div className="flex items-center justify-between max-[540px]:flex-col max-[540px]:items-start max-[540px]:space-y-2">
               <span className="text-xs font-semibold text-zinc-800 uppercase tracking-wider">Tailored Cover Letter</span>
 
               <div className="flex items-center space-x-2">
@@ -392,7 +392,7 @@ export default function OutputResults({ data, analysisId }) {
                 </button>
                 <button
                   onClick={handleDownloadPdf}
-                  className="flex items-center space-x-1.5 p-2 bg-[#f4330d] border border-[#f4330d] hover:border-gray-300 rounded-full justify-center text-xs font-medium text-white transition-colors cursor-pointer"
+                  className="flex items-center space-x-1.5 p-2 bg-brand border border-brand hover:border-brand/60 rounded-full justify-center text-xs font-medium text-white transition-colors cursor-pointer"
                 >
                   <FiDownload className="w-5 h-5 text-white" />
                 </button>

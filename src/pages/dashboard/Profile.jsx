@@ -468,7 +468,7 @@ export default function Profile() {
                         </button>
                         <button
                           type="submit"
-                          className="text-xs font-semibold text-white bg-[#f4330d] hover:bg-[#f4330d]/90 px-2.5 py-1 rounded transition-colors cursor-pointer"
+                          className="text-xs font-semibold text-white bg-brand hover:bg-brand/90 px-2.5 py-1 rounded transition-colors cursor-pointer"
                         >
                           Save
                         </button>
@@ -534,7 +534,7 @@ export default function Profile() {
                         </button>
                         <button
                           type="submit"
-                          className="text-xs font-semibold text-white bg-[#f4330d] hover:bg-[#f4330d]/90 px-2.5 py-1 rounded transition-colors cursor-pointer"
+                          className="text-xs font-semibold text-white bg-brand hover:bg-brand/90 px-2.5 py-1 rounded transition-colors cursor-pointer"
                         >
                           Save
                         </button>
@@ -553,7 +553,7 @@ export default function Profile() {
                         <button
                           type="button"
                           onClick={() => setIsAddingSkill(true)}
-                          className="text-xs font-bold text-[#f4330d] hover:text-[#f4330d]/80 cursor-pointer flex items-center gap-1 transition-colors px-2.5 py-1 rounded-md hover:bg-[#f4330d]/5"
+                          className="text-xs font-bold text-brand hover:text-brand/80 cursor-pointer flex items-center gap-1 transition-colors px-2.5 py-1 rounded-md hover:bg-brand/5"
                         >
                           <FiPlus className="w-3.5 h-3.5" /> Add Skill
                         </button>
@@ -571,7 +571,7 @@ export default function Profile() {
                           />
                           <button
                             type="submit"
-                            className="py-1.5 px-1.5 rounded text-white bg-[#f4330d] hover:bg-[#f4330d]/90 transition-colors cursor-pointer"
+                            className="py-1.5 px-1.5 rounded text-white bg-brand hover:bg-brand/90 transition-colors cursor-pointer"
                             aria-label="Submit Skill"
                           >
                             <FiCheck className="w-4 h-4" />
@@ -605,7 +605,7 @@ export default function Profile() {
                           <button
                             type="button"
                             onClick={() => handleRemoveSkill(skill)}
-                            className="cursor-pointer text-zinc-400 hover:text-red-500 transition-all font-semibold rounded-full p-0.5 hover:bg-zinc-200"
+                            className="cursor-pointer text-zinc-400 transition-all font-semibold rounded-full p-0.5 hover:bg-zinc-200"
                             aria-label={`Remove ${skill}`}
                           >
                             <FiX className="w-3.5 h-3.5" />
@@ -644,7 +644,7 @@ export default function Profile() {
                     aria-checked={weeklyEmail}
                     aria-labelledby="weekly-email-label"
                     onClick={() => setWeeklyEmail(!weeklyEmail)}
-                    className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 shrink-0 ${weeklyEmail ? "bg-[#f4330d]" : "bg-zinc-300"
+                    className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 shrink-0 ${weeklyEmail ? "bg-brand" : "bg-zinc-300"
                       }`}
                   >
                     <div
@@ -664,9 +664,9 @@ export default function Profile() {
                     onChange={(e) => setAiModel(e.target.value)}
                     className="py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white w-full text-sm font-medium cursor-pointer"
                   >
+                    <option value="Claude 3.6 Sonnet">Claude 3.6 Sonnet</option>
                     <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
-                    <option value="Claude 3 Opus">Claude 3 Opus</option>
-                    <option value="Claude 3 Haiku">Claude 3 Haiku</option>
+                    <option value="Claude 4.6 Opus">Opus 4.6</option>
                   </select>
                   <p className="text-xs text-zinc-500">
                     Select which AI model is utilized to process and rewrite your resume items.
@@ -679,7 +679,7 @@ export default function Profile() {
               <button
                 onClick={handleSaveProfile}
                 disabled={isSaving}
-                className="px-6 py-3 bg-[#111214] text-white font-medium rounded-lg hover:bg-[#111214]/80 transition-all flex items-center space-x-2 cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none text-base shadow"
+                className="px-6 py-3 bg-brand text-white font-medium rounded-lg hover:bg-[#111214]/80 transition-all flex items-center space-x-2 cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none text-base shadow"
               >
                 {isSaving ? (
                   <span>Saving...</span>
