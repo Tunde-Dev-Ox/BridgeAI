@@ -134,7 +134,7 @@ export default function Home() {
   const { openAuthModal } = useAuthModal();
   const [scrolled, setScrolled] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
-  const [totalAnalyses, setTotalAnalyses] = useState(null);
+  // const [totalAnalyses, setTotalAnalyses] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -142,11 +142,11 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    supabase.from("analyses").select("id", { count: "exact", head: true }).then(
-      ({ count }) => setTotalAnalyses(count ?? 0)
-    );
-  }, []);
+  // useEffect(() => {
+  //   supabase.from("analyses").select("id", { count: "exact", head: true }).then(
+  //     ({ count }) => setTotalAnalyses(count ?? 0)
+  //   );
+  // }, []);
 
   return (
     <div className="min-h-screen bg-white text-zinc-900">
@@ -171,10 +171,6 @@ export default function Home() {
       <section className="relative pt-32 pb-24 px-6 overflow-hidden">
         {/* <video src="https://framerusercontent.com/assets/iWlVr4qV5BuFxjhc6g7QcPK5o.mp4"></video> */}
         <div className="max-w-6xl mx-auto text-center relative">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-50 border border-zinc-100 text-xs font-semibold text-zinc-700 mb-6 animate-fade-in">
-            <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 animate-pulse-glow" />
-            <p className="">Total analyses performed on Goover: <span className="">{totalAnalyses?.toLocaleString() ?? "—"}</span></p>
-          </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight font-cabinet leading-[1.1] max-w-4xl mx-auto animate-fade-in">
             You have the experience.
             <br />
