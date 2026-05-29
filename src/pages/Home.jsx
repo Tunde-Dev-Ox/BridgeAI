@@ -154,7 +154,7 @@ export default function Home() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-white backdrop-blur-md border-b border-zinc-100 shadow-xs" : "bg-transparent"}`}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <a href="/" className="w-24">
-            <img src="/goover.png" alt="" className="w-full h-full object-contain" />
+            <img src="/goover.svg" alt="" className="w-full h-full object-contain" />
           </a>
           <div className="flex items-center gap-4">
             <button
@@ -296,7 +296,7 @@ export default function Home() {
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
               <span className="block">
-                <img src="/goover.png" alt="" className="w-20 object-contain" />
+                <img src="/goover.svg" alt="" className="w-20 object-contain" />
               </span>
               <p className="mt-3 text-sm text-zinc-500 leading-relaxed max-w-xs">
                 Translate your local experience into a language global hiring managers understand.

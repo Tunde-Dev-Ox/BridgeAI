@@ -84,7 +84,7 @@ export default function Sidebar({ onClick, onNew }) {
       {/* Desktop sidebar */}
       <div className="hidden md:flex w-48 bg-[#f5f5f5] h-screen p-6 pb-4 flex-col overflow-hidden border-r border-gray-300">
         <Link to="/app" className="block mb-4">
-          <img src="/goover.png" alt="logo" className="w-20" />
+          <img src="/goover.svg" alt="logo" className="w-20" />
         </Link>
         <nav className="space-y-2" role="navigation" aria-label="Main navigation">
           {NAV_ITEMS.map((item) => (
