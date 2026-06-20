@@ -664,9 +664,7 @@ export default function Profile() {
                     onChange={(e) => setAiModel(e.target.value)}
                     className="py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white w-full text-sm font-medium cursor-pointer"
                   >
-                    <option value="Claude 3.6 Sonnet">Claude 3.6 Sonnet</option>
-                    <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
-                    <option value="Claude 4.6 Opus">Opus 4.6</option>
+                    <option value="Gemini 2.5 Pro">Gemini 2.5 Pro</option>
                   </select>
                   <p className="text-xs text-zinc-500">
                     Select which AI model is utilized to process and rewrite your resume items.

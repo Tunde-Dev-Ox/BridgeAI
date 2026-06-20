@@ -49,10 +49,10 @@ export default function NotFound() {
 
         <h1 className="text-6xl font-semibold tracking-tight font-cabinet text-zinc-200 select-none">404</h1>
         <h2 className="text-2xl font-semibold tracking-tight font-cabinet text-zinc-900 mt-2">
-          You've wandered off the bridge
+           Looks like you're lost... 
         </h2>
         <p className="mt-2 text-sm text-zinc-500 max-w-xs mx-auto leading-relaxed">
-          This page doesn't exist. Maybe it fell into the gap — or never made it across at all.
+          No worries, we all get lost sometimes, but not for long. Let's get you back on track. 
         </p>
 
         <div className="mt-8 flex items-center justify-center gap-3">

@@ -92,11 +92,11 @@ export default function Projects() {
     };
   }, []);
 
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    loadAnalyses(nextPage, activeFilter, searchQuery);
-  };
+  // const handleLoadMore = () => {
+  //   const nextPage = page + 1;
+  //   setPage(nextPage);
+  //   loadAnalyses(nextPage, activeFilter, searchQuery);
+  // };
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -150,7 +150,7 @@ export default function Projects() {
     });
   };
 
-  const hasMore = analyses.length < totalCount;
+  // const hasMore = analyses.length < totalCount;
 
   const showDetail = id && (selectedResult || isLoadingDetail);
   const showList = !id;
@@ -160,7 +160,7 @@ export default function Projects() {
       {showDetail ? (
         isLoadingDetail ? (
           <div className="flex justify-center py-20 w-full">
-            <div className="w-8 h-8 border-4 border-zinc-200 border-t-[#f4330d] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-[#4b3ae0] rounded-full animate-spin" />
           </div>
         ) : (
           <div className="w-full max-w-5xl h-full flex flex-col">
@@ -191,13 +191,13 @@ export default function Projects() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center border-b border-zinc-100 pb-5">
             <div className="flex flex-wrap gap-1.5">
-              {["ALL", "PRODUCT DESIGN", "ENGINEERING", "PRODUCT", "MARKETING"].map((filter) => (
+              {["ALL"].map((filter) => (
                 <button
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer border ${
                     activeFilter === filter
-                      ? "bg-[#111214] text-white border-transparent"
+                      ? "bg-brand text-white border-transparent"
                       : "bg-transparent text-zinc-500 border-zinc-200 hover:text-zinc-900 hover:bg-zinc-50"
                   }`}
                 >
@@ -282,18 +282,6 @@ export default function Projects() {
               {analyses.length === 0 && (
                 <EmptyState onNewAnalysis={() => navigate("/app")} />
               )}
-            </div>
-          )}
-
-          {hasMore && (
-            <div className="flex justify-center pt-4">
-              <button
-                onClick={handleLoadMore}
-                disabled={isLoading}
-                className="flex items-center space-x-1.5 text-sm font-bold text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 transition-colors px-5 py-2.5 rounded-lg border border-zinc-300/80 cursor-pointer shadow-sm disabled:opacity-50"
-              >
-                {isLoading ? "Loading..." : "Load older analyses"}
-              </button>
             </div>
           )}
         </div>

@@ -123,8 +123,8 @@ export default function AuthModal({ onClose }) {
       <div className="w-full max-w-120 text-center flex flex-col items-center py-8 relative animate-fade-in">
 
         {/* Title */}
-        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#141414] mb-2 leading-tight max-w-105 font-cabinet">
-          Sign up below to unlock the full potential of Goover
+        <h1 className="text-3xl sm:text-3xl font-semibold tracking-tight text-[#141414] mb-2 leading-tight max-w-105 font-cabinet">
+          Sign up below to try Goover beta for free
         </h1>
 
         {/* Privacy Terms */}

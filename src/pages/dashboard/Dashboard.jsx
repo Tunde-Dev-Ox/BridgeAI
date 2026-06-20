@@ -140,7 +140,7 @@ export default function Dashboard() {
       ) : (
         <>
           <div className="relative mb-8 sm:mb-14 text-center max-w-2xl pt-8 sm:pt-12">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-zinc-950 font-cabinet leading-[1.15] transition-opacity duration-300">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-zinc-950 leading-[1.15] transition-opacity duration-300">
               Let's get that job, shall we?
             </h1>
             <p className="mx-auto mt-4 sm:mt-5 max-w-lg text-sm sm:text-base leading-relaxed sm:leading-7 text-zinc-400">
