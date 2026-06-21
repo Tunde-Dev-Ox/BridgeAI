@@ -190,19 +190,10 @@ export default function Home() {
             <span className="bg-linear-to-r from-brand to-[#3217cb] bg-clip-text text-transparent">Global companies</span> just don't see it yet.
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: "0.15s" }}>
-            Goover translates your local market experience into the language global hiring managers immediately understand, so you can compete anywhere.
+            Goover translates your African market product management experience into <span className="text-black">global market language</span>, so you can compete anywhere.
           </p>
           
           <div className="mt-10 flex items-center justify-center gap-4 animate-fade-in max-[540px]:flex-col" style={{ animationDelay: "0.3s" }}>
-            {user ? (
-              <Link
-                to="/app"
-                className="px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#533afd]/25 transition-all flex items-center gap-2 text-sm active:scale-[0.97]"
-              >
-                Go to Dashboard
-                <FiArrowRight className="w-4.5 h-4.5" />
-              </Link>
-            ) : (
               <button
                 onClick={openAuthModal}
                 className="px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#533afd]/25 transition-all flex items-center gap-2 text-sm active:scale-[0.97] cursor-pointer"
@@ -210,7 +201,6 @@ export default function Home() {
                 Try Goover Free
                 <FiArrowRight className="w-4.5 h-4.5" />
               </button>
-            )}
             
             <a
               href="#how-it-works"
@@ -219,8 +209,7 @@ export default function Home() {
               See How It Works
             </a>
           </div>
-
-          {/* Styled video-ready preview frame with browser container styling */}
+          {/* Styled video preview frame with browser container styling */}
           <figure className="mt-16 sm:mt-20 relative mx-auto max-w-5xl rounded-2xl overflow-hidden border border-zinc-200/80 shadow-[0_30px_100px_rgba(83,58,253,0.12)] bg-zinc-50 p-2 animate-fade-in group" style={{ animationDelay: "0.45s" }}>
             <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-zinc-200/60 bg-zinc-100/80">
               <span className="w-3 h-3 rounded-full bg-red-400" />
@@ -228,21 +217,18 @@ export default function Home() {
               <span className="w-3 h-3 rounded-full bg-green-400" />
               <span className="ml-4 text-xs text-zinc-400 font-medium tracking-wide">Goover App Demo</span>
             </div>
-            <div className="relative aspect-video w-full overflow-hidden rounded-b-xl bg-white flex items-center justify-center">
-              <img 
-                src="/goover-main.png" 
-                alt="Goover Product Interface" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.01]" 
+            <div className="relative w-full overflow-hidden rounded-b-xl bg-white flex items-center justify-center">
+              <video 
+                src="https://res.cloudinary.com/relostay/video/upload/v1782062842/goover-demo_dwdcnh.mp4" 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.005]"
               />
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 flex items-center justify-center pointer-events-none">
-                <div className="w-16 h-16 rounded-full bg-white/95 shadow-xl flex items-center justify-center text-brand scale-90 group-hover:scale-100 transition-all duration-300 opacity-90 group-hover:opacity-100">
-                  <svg className="w-6 h-6 fill-current translate-x-0.5" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </div>
-              </div>
             </div>
           </figure>
+          
         </div>
       </section>
 
