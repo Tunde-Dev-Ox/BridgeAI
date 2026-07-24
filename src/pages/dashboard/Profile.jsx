@@ -3,6 +3,7 @@ import { FiMail, FiEdit2, FiPlus, FiX, FiUser, FiUpload, FiCheck } from "react-i
 import { toast } from "sonner";
 import { useAuthModal } from "../../context/AuthModalContext";
 import { supabase } from "../../supabaseClient";
+import { trackEvent } from "../../lib/mixpanel";
 
 const sanitizeInput = (str) => {
   if (typeof str !== "string") return str;
@@ -40,7 +41,8 @@ export default function Profile() {
   const [aiModel, setAiModel] = useState("Claude 3.5 Sonnet");
 
   const [isSaving, setIsSaving] = useState(false);
-  const saveTimeoutRef = useRef(null);
+  const [saveStatus, setSaveStatus] = useState("idle");
+  const saveStatusTimer = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -65,18 +67,18 @@ export default function Profile() {
       .single()
       .then(({ data, error }) => {
         if (error) throw error;
-        setEmail(user.email ?? "alex.chen@example.com");
+        setEmail(user.email ?? "");
         if (data) {
-          setFirstName(data.first_name ?? "Alex");
-          setLastName(data.last_name ?? "Chen");
+          setFirstName(data.first_name ?? "");
+          setLastName(data.last_name ?? "");
           setAvatarUrl(data.avatar_url ?? "");
-          setCurrentRole(data.role_title ?? "Senior Product Designer");
-          setCurrentRoleMeta(data.role_title_meta ?? "Fintech / 5+ Years Exp.");
-          setTargetRegion(data.target_region ?? "North America");
-          setTargetRegionMeta(data.target_region_meta ?? "Remote or Hybrid (NYC)");
-          setSkills(data.skills ?? ["UX Strategy", "Design Systems", "Figma", "User Research", "Prototyping"]);
+          setCurrentRole(data.role_title ?? "");
+          setCurrentRoleMeta(data.role_title_meta ?? "");
+          setTargetRegion(data.target_region ?? "");
+          setTargetRegionMeta(data.target_region_meta ?? "");
+          setSkills(data.skills ?? []);
           setWeeklyEmail(data.weekly_email ?? true);
-          setAiModel(data.ai_model ?? "Claude 3.5 Sonnet");
+          setAiModel(data.ai_model ?? "Gemini 2.5 Pro");
         }
       })
       .catch((err) => {
@@ -197,14 +199,7 @@ export default function Profile() {
         if (upsertError) throw upsertError;
 
         toast.success("Avatar uploaded successfully!", { id: toastId });
-
-        if (typeof pendo !== "undefined") {
-          pendo.track("avatar_uploaded", {
-            fileType: file.type,
-            fileSizeBytes: file.size,
-            fileExtension: file.name.split('.').pop(),
-          });
-        }
+        trackEvent("avatar_uploaded", { fileType: file.type, fileSizeBytes: file.size });
       } catch (error) {
         console.error("Avatar upload error:", error);
         toast.error("Failed to upload avatar", { id: toastId });
@@ -222,6 +217,7 @@ export default function Profile() {
   const handleSaveProfile = useCallback(async () => {
     if (isSaving) return;
     setIsSaving(true);
+    setSaveStatus("saving");
 
     const profileData = {
       first_name: sanitizeInput(firstName),
@@ -236,8 +232,8 @@ export default function Profile() {
       ai_model: aiModel,
     };
 
-    if (user) {
-      try {
+    try {
+      if (user) {
         const { error } = await supabase
           .from("profiles")
           .upsert({
@@ -247,29 +243,24 @@ export default function Profile() {
           });
 
         if (error) throw error;
-        toast.success("Profile saved successfully!");
-
-        if (typeof pendo !== "undefined") {
-          pendo.track("profile_saved", {
-            hasAvatar: !!avatarUrl,
-            roleTitle: profileData.role_title,
-            targetRegion: profileData.target_region,
-            skillsCount: skills.length,
-            weeklyEmailEnabled: weeklyEmail,
-            aiModel,
-            hasFirstName: !!profileData.first_name,
-            hasLastName: !!profileData.last_name,
-          });
-        }
-      } catch (error) {
-        console.error("Error saving profile:", error);
-        toast.error(error.message || "Failed to save profile");
       }
-    }
-
-    saveTimeoutRef.current = setTimeout(() => {
+      setSaveStatus("success");
+      toast.success("Profile saved successfully!");
+      trackEvent("profile_saved", {
+        hasAvatar: !!avatarUrl,
+        skillsCount: skills.length,
+        weeklyEmailEnabled: weeklyEmail,
+        aiModel,
+      });
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      toast.error(error.message || "Failed to save profile");
+      setSaveStatus("error");
+    } finally {
       setIsSaving(false);
-    }, 2000);
+      if (saveStatusTimer.current) clearTimeout(saveStatusTimer.current);
+      saveStatusTimer.current = setTimeout(() => setSaveStatus("idle"), 2000);
+    }
   }, [
     isSaving, firstName, lastName, avatarUrl,
     currentRole, currentRoleMeta, targetRegion, targetRegionMeta,
@@ -278,7 +269,7 @@ export default function Profile() {
 
   useEffect(() => {
     return () => {
-      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      if (saveStatusTimer.current) clearTimeout(saveStatusTimer.current);
     };
   }, []);
 
@@ -359,7 +350,7 @@ export default function Profile() {
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       placeholder="Enter first name"
-                      className="w-full py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white text-base font-normal"
+                      className="w-full py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white text-base font-normal"
                     />
                   </div>
 
@@ -373,7 +364,7 @@ export default function Profile() {
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Enter last name"
-                      className="w-full py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white text-base font-normal"
+                      className="w-full py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white text-base font-normal"
                     />
                   </div>
 
@@ -447,7 +438,7 @@ export default function Profile() {
                         value={tempRole}
                         onChange={(e) => setTempRole(e.target.value)}
                         placeholder="Role title (e.g. Senior Product Designer)"
-                        className="w-full py-1.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white text-base font-normal"
+                        className="w-full py-1.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white text-base font-normal"
                       />
                       <label htmlFor="tempRoleMeta" className="sr-only">Role Metadata</label>
                       <input
@@ -456,7 +447,7 @@ export default function Profile() {
                         value={tempRoleMeta}
                         onChange={(e) => setTempRoleMeta(e.target.value)}
                         placeholder="Metadata (e.g. Fintech / 5+ Years Exp.)"
-                        className="w-full py-1.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white text-base font-normal"
+                        className="w-full py-1.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white text-base font-normal"
                       />
                       <div className="flex justify-end space-x-2 pt-1">
                         <button
@@ -513,7 +504,7 @@ export default function Profile() {
                         value={tempRegion}
                         onChange={(e) => setTempRegion(e.target.value)}
                         placeholder="Target Region (e.g. North America)"
-                        className="w-full py-1.5 px-3 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white text-base font-normal"
+                        className="w-full py-1.5 px-3 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white text-base font-normal"
                       />
                       <label htmlFor="tempRegionMeta" className="sr-only">Region Metadata</label>
                       <input
@@ -522,7 +513,7 @@ export default function Profile() {
                         value={tempRegionMeta}
                         onChange={(e) => setTempRegionMeta(e.target.value)}
                         placeholder="Metadata (e.g. Remote or Hybrid (NYC))"
-                        className="w-full py-1.5 px-3 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white text-base font-normal"
+                        className="w-full py-1.5 px-3 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white text-base font-normal"
                       />
                       <div className="flex justify-end space-x-2 pt-1">
                         <button
@@ -567,7 +558,7 @@ export default function Profile() {
                             value={newSkill}
                             onChange={(e) => setNewSkill(e.target.value)}
                             placeholder="Type skill name"
-                            className="w-full py-1 px-3 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white text-base font-normal"
+                            className="w-full py-1 px-3 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white text-base font-normal"
                           />
                           <button
                             type="submit"
@@ -662,7 +653,7 @@ export default function Profile() {
                     id="aiModel"
                     value={aiModel}
                     onChange={(e) => setAiModel(e.target.value)}
-                    className="py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white w-full text-sm font-medium cursor-pointer"
+                    className="py-2.5 px-3.5 border border-gray-300 rounded-lg text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white w-full text-sm font-medium cursor-pointer"
                   >
                     <option value="Gemini 2.5 Pro">Gemini 2.5 Pro</option>
                   </select>
@@ -677,10 +668,18 @@ export default function Profile() {
               <button
                 onClick={handleSaveProfile}
                 disabled={isSaving}
-                className="px-6 py-3 bg-brand text-white font-medium rounded-lg hover:bg-[#111214]/80 transition-all flex items-center space-x-2 cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none text-base shadow"
+                className="px-6 py-3 bg-brand text-white font-medium rounded-lg hover:bg-brand-dark/80 transition-all flex items-center gap-2 cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none text-base shadow focus-ring"
               >
-                {isSaving ? (
-                  <span>Saving...</span>
+                {saveStatus === "saving" ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    <span>Saving...</span>
+                  </>
+                ) : saveStatus === "success" ? (
+                  <>
+                    <FiCheck className="w-4 h-4" />
+                    <span>Saved</span>
+                  </>
                 ) : (
                   <span>Save changes</span>
                 )}

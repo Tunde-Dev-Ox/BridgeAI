@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand: #533afd;
+  --color-brand-dark: #3217cb;
+  --color-brand-light: rgba(83, 58, 253, 0.08);
+  --color-accent: #f4330d;
+  --color-surface: #f5f5f5;
+  --color-dark: #111214;
+}
+
 @layer utilities {
   .scrollbar-none::-webkit-scrollbar {
     display: none;
@@ -7,6 +16,12 @@
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/40 focus-visible:ring-offset-1 focus-visible:border-brand/60 transition-all;
+  }
+  .focus-ring-input {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand/50 transition-all;
   }
 }
 
@@ -37,7 +52,6 @@
   animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* custom fonts */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
@@ -177,14 +191,6 @@ body {
   font-family: "Plus Jakarta Sans", sans-serif;
   background-color: #fff;
   color: #141414;
-}
-
-.bg-brand {
-  background-color: #533afd;
-}
-
-.text-brand {
-  color: #533afd;
 }
 
 /* Custom grid patterns and masking for homepage facelift */

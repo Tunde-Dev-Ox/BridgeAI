@@ -58,7 +58,7 @@ export default function NotFound() {
         <div className="mt-8 flex items-center justify-center gap-3">
           <Link
             to="/"
-            className="px-5 py-2.5 bg-[#111214] text-white text-sm font-semibold rounded-xl hover:bg-[#111214]/90 transition-all flex items-center gap-2 active:scale-[0.97]"
+            className="px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-xl hover:bg-dark/90 transition-all flex items-center gap-2 active:scale-[0.97] focus-ring"
           >
             <FiHome className="w-4 h-4" />
             Go Home

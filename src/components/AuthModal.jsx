@@ -3,6 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FiX } from "react-icons/fi";
 import { toast } from "sonner";
 import { supabase } from "../supabaseClient";
+import { trackEvent } from "../lib/mixpanel";
 
 export default function AuthModal({ onClose }) {
   const [email, setEmail] = useState("");
@@ -82,13 +83,7 @@ export default function AuthModal({ onClose }) {
       });
       if (error) throw error;
       toast.success("Magic link sent! Check your email inbox.");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("magic_link_requested", {
-          emailDomain: email.split("@")[1] || "unknown",
-        });
-      }
-
+      trackEvent("magic_link_requested", { emailDomain: email.split("@")[1] || "unknown" });
       onClose();
       setEmail("");
     } catch (error) {
@@ -116,7 +111,7 @@ export default function AuthModal({ onClose }) {
         className="absolute top-6 right-6 text-[#141414] hover:text-black transition-colors cursor-pointer p-2 rounded-full"
         aria-label="Close"
       >
-        <FiX className="w-6 h-6 text-6xl" />
+        <FiX className="w-6 h-6" />
       </button>
 
       {/* Modal Container */}
@@ -141,7 +136,7 @@ export default function AuthModal({ onClose }) {
           <button
             onClick={() => handleSocialLogin("Google")}
             disabled={isLoading}
-            className="w-full py-3.5 px-4 hover:bg-white text-[#111214] font-medium rounded-[4px] flex items-center justify-center space-x-3 transition-all duration-200 hover:shadow-md cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none border border-gray-300"
+            className="w-full py-3.5 px-4 hover:bg-white text-dark font-medium rounded-[4px] flex items-center justify-center space-x-3 transition-all duration-200 hover:shadow-md cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none border border-gray-300 focus-ring"
           >
             <FcGoogle className="w-5 h-5" />
             <span className="text-base tracking-wide">Continue with Google</span>
@@ -167,14 +162,14 @@ export default function AuthModal({ onClose }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
-                className="w-full py-3.5 border border-gray-300 focus:border-gray-500 focus:outline-2 focus:outline-gray-600 focus:outline-offset-2 rounded-[4px] text-zinc-600 placeholder-zinc-600 transition-colors px-4 text-base "
+                className="w-full py-3.5 border border-gray-300 focus-ring-input rounded-[4px] text-zinc-600 placeholder-zinc-600 px-4 text-base "
               />
             </div>
             
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 px-4 bg-brand text-white font-medium rounded-[4px] flex items-center justify-center space-x-3 transition-all duration-200 hover:bg-[#111214]/95 cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none"
+              className="w-full py-3.5 px-4 bg-brand text-white font-medium rounded-[4px] flex items-center justify-center space-x-3 transition-all duration-200 hover:bg-brand-dark/95 cursor-pointer active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none focus-ring"
             >
               {isLoading ? "Loading..." : "Continue with email"}
             </button>

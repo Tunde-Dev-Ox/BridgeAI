@@ -10,7 +10,8 @@ export async function sendFeedback({ type, subject, message, email }) {
     const session = (await supabase.auth.getSession()).data.session;
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${session?.access_token ?? ANON_KEY}`,
+      apikey: ANON_KEY,
+      ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
     };
 
     const response = await fetch("/api/functions/send-feedback", {

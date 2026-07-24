@@ -5,6 +5,7 @@ import { IoArrowUpSharp, IoCloseOutline } from "react-icons/io5";
 import { toast } from "sonner";
 import { extractTextFromFile } from "../services/fileUtils";
 import { fetchUrl as fetchUrlService } from "../services/analysis";
+import { trackEvent } from "../lib/mixpanel";
 
 function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
   const fileInputRef = useRef(null);
@@ -30,16 +31,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
       }
       appendText(text);
       toast.success(`Extracted ${text.split(/\s+/).length} words from ${file.name}`);
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("file_uploaded", {
-          fileType: file.type,
-          fileName: file.name,
-          wordCount: text.split(/\s+/).length,
-          fieldTarget: title,
-          fileSizeBytes: file.size,
-        });
-      }
+      trackEvent("file_uploaded", { fieldTarget: title, wordCount: text.split(/\s+/).length });
     } catch (error) {
       toast.error(error.message || "Failed to extract text from file");
     } finally {
@@ -57,13 +49,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
       }
       appendText(text);
       toast.success(`Pasted ${text.split(/\s+/).length} words from clipboard`);
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("clipboard_pasted", {
-          wordCount: text.split(/\s+/).length,
-          fieldTarget: title,
-        });
-      }
+      trackEvent("clipboard_pasted", { fieldTarget: title, wordCount: text.split(/\s+/).length });
     } catch (error) {
       if (error.name === "NotAllowedError") {
         toast.error("Allow clipboard access in your browser settings");
@@ -91,15 +77,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
       const prefix = title ? `[Source: ${title}](${url})\n\n` : "";
       appendText(prefix + text);
       toast.success(`Fetched ${text.split(/\s+/).length} words from URL`);
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("url_content_fetched", {
-          url,
-          wordCount: text.split(/\s+/).length,
-          hasTitle: !!title,
-          fieldTarget: title,
-        });
-      }
+      trackEvent("url_content_fetched", { fieldTarget: title, wordCount: text.split(/\s+/).length, hasTitle: !!title });
       setShowUrlInput(false);
       setUrlValue("");
     } catch (error) {
@@ -147,7 +125,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
               onChange={(e) => setUrlValue(e.target.value)}
               onKeyDown={handleUrlKeyDown}
               placeholder="Paste job posting URL..."
-              className="flex-1 py-2 px-3 border border-gray-200 rounded-lg text-sm text-zinc-700 outline-none focus:border-gray-200 focus:ring-1 focus:ring-gray-200 transition-all"
+              className="flex-1 py-2 px-3 border border-gray-200 rounded-lg text-sm text-zinc-700 outline-none focus-ring-input"
               autoFocus
               disabled={isFetching}
             />
@@ -189,7 +167,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
               onClick={() => fileInputRef.current?.click()}
               disabled={isExtracting}
               aria-label={`Upload ${title.toLowerCase()} file`}
-              className="grid h-11 w-11 flex-none place-items-center rounded-full border border-zinc-200 bg-white text-zinc-500 shadow-sm transition-colors hover:border-zinc-300 hover:text-zinc-950 cursor-pointer active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="grid h-11 w-11 flex-none place-items-center rounded-full border border-zinc-200 bg-white text-zinc-500 shadow-sm transition-colors hover:border-zinc-300 hover:text-zinc-950 cursor-pointer active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed focus-ring"
             >
               {isExtracting ? (
                 <span className="block w-4 h-4 border-2 border-zinc-300 border-t-zinc-600 rounded-full animate-spin" />
@@ -223,7 +201,7 @@ function ChatForm({ title, value, onChange, placeholder, run = false, onRun }) {
                 disabled={!value}
                 data-tour="run-btn"
                 aria-label={`Run ${title.toLowerCase()} analysis`}
-                className="grid h-11 w-11 flex-none place-items-center rounded-full border border-zinc-200 bg-brand text-white shadow-sm transition-colors hover:border-zinc-300 hover:text-white/80 cursor-pointer active:scale-[0.98] ml-auto disabled:cursor-not-allowed disabled:opacity-50"
+                className="grid h-11 w-11 flex-none place-items-center rounded-full border border-zinc-200 bg-brand text-white shadow-sm transition-colors hover:border-zinc-300 hover:text-white/80 cursor-pointer active:scale-[0.98] ml-auto disabled:cursor-not-allowed disabled:opacity-50 focus-ring"
               >
                 <IoArrowUpSharp className="h-5 w-5" />
               </button>

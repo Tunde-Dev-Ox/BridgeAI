@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, startTransition } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FiSearch, FiArrowLeft, FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
@@ -7,6 +7,7 @@ import ConfirmModal from "../../components/ConfirmModal";
 import { useAuthModal } from "../../context/AuthModalContext";
 import EmptyState from "../../components/EmptyState";
 import { fetchAnalyses, fetchAnalysisById, deleteAnalysis, PAGE_SIZE } from "../../services/analyses";
+import { trackEvent } from "../../lib/mixpanel";
 
 export default function Projects() {
   const { id } = useParams();
@@ -20,15 +21,19 @@ export default function Projects() {
   const searchTimerRef = useRef(null);
   const [activeFilter, setActiveFilter] = useState("ALL");
   const [analyses, setAnalyses] = useState([]);
-  const [page, setPage] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
+  // const [page, setPage] = useState(0);
+  // const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   useEffect(() => {
     if (!id || !user) return;
-    setIsLoadingDetail(true);
-    setSelectedResult(null);
+
+    startTransition(() => {
+      setIsLoadingDetail(true);
+      setSelectedResult(null);
+    });
+
     fetchAnalysisById(id)
       .then((data) => setSelectedResult(data.result))
       .catch((err) => {
@@ -43,7 +48,7 @@ export default function Projects() {
     if (!user) return;
     setIsLoading(true);
     try {
-      const { data, count } = await fetchAnalyses(user.id, {
+      const { data } = await fetchAnalyses(user.id, {
         page: pageNum,
         limit: PAGE_SIZE,
         filter: filter === "ALL" ? undefined : filter,
@@ -54,7 +59,7 @@ export default function Projects() {
       } else {
         setAnalyses((prev) => [...prev, ...data]);
       }
-      setTotalCount(count);
+      // setTotalCount(count);
     } catch (error) {
       console.error("Failed to load analyses:", error);
       toast.error(error.message || "Failed to load history");
@@ -65,8 +70,10 @@ export default function Projects() {
 
   useEffect(() => {
     if (id) return;
-    setPage(0);
-    loadAnalyses(0, activeFilter, searchQuery);
+    // setPage(0);
+    startTransition(() => {
+      loadAnalyses(0, activeFilter, searchQuery);
+    });
   }, [user, activeFilter, id, loadAnalyses, searchQuery]);
 
   const handleSearch = (e) => {
@@ -74,15 +81,8 @@ export default function Projects() {
     setSearchQuery(value);
     if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
     searchTimerRef.current = setTimeout(() => {
-      setPage(0);
       loadAnalyses(0, activeFilter, value);
-
-      if (value && typeof pendo !== "undefined") {
-        pendo.track("analysis_history_searched", {
-          searchQuery: value.substring(0, 100),
-          activeFilter,
-        });
-      }
+      trackEvent("analysis_history_searched", { searchQuery: value.substring(0, 100) });
     }, 350);
   };
 
@@ -105,13 +105,7 @@ export default function Projects() {
       setAnalyses((prev) => prev.filter((a) => a.id !== deleteTarget));
       setDeleteTarget(null);
       toast.success("Analysis deleted");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("analysis_deleted", {
-          analysisId: deleteTarget,
-          deletedFromDetailView: !!id,
-        });
-      }
+      trackEvent("analysis_deleted", { analysisId: deleteTarget });
       if (id === deleteTarget) {
         navigate("/app/projects", { replace: true });
       }
@@ -195,11 +189,10 @@ export default function Projects() {
                 <button
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer border ${
-                    activeFilter === filter
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer border focus-ring ${activeFilter === filter
                       ? "bg-brand text-white border-transparent"
                       : "bg-transparent text-zinc-500 border-zinc-200 hover:text-zinc-900 hover:bg-zinc-50"
-                  }`}
+                    }`}
                 >
                   {filter === "ALL" ? "All Categories" : filter}
                 </button>
@@ -213,7 +206,7 @@ export default function Projects() {
                 placeholder="Search history..."
                 value={searchQuery}
                 onChange={handleSearch}
-                className="w-full py-1.5 pl-9 pr-4 border border-gray-200 rounded-lg text-sm text-zinc-800 focus:outline-none focus:ring focus:ring-gray-200 focus:border-transparent transition-all placeholder-zinc-400 bg-white"
+                className="w-full py-1.5 pl-9 pr-4 border border-gray-200 rounded-lg text-sm text-zinc-800 focus-ring-input placeholder-zinc-400 bg-white"
               />
             </div>
           </div>

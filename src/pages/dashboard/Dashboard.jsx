@@ -6,8 +6,7 @@ import OutputResults from "../../components/OutputResults";
 import { useAuthModal } from "../../context/AuthModalContext";
 import { runAnalysis, saveAnalysis } from "../../services/analysis";
 import AnalysisLoading from "../../components/AnalysisLoading";
-
-const PENDO_AGENT_ID = "cFm4fdPaDGg-2RbJnN1mPQX3BkU";
+import { trackEvent } from "../../lib/mixpanel";
 
 export default function Dashboard() {
   const { user } = useAuthModal();
@@ -16,8 +15,6 @@ export default function Dashboard() {
   const [experienceSummary, setExperienceSummary] = useState("");
   const [analysisResult, setAnalysisResult] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const conversationIdRef = useRef(crypto.randomUUID());
-  const lastPromptMessageIdRef = useRef(null);
   const initialMount = useRef(true);
 
   useEffect(() => {
@@ -28,8 +25,6 @@ export default function Dashboard() {
     setAnalysisResult(null);
     setJobDescription("");
     setExperienceSummary("");
-    conversationIdRef.current = crypto.randomUUID();
-    lastPromptMessageIdRef.current = null;
   }, [resetKey]);
 
   const handleRunAnalysis = async () => {
@@ -43,29 +38,8 @@ export default function Dashboard() {
     setIsAnalyzing(true);
     setAnalysisResult(null);
 
-    const promptMessageId = crypto.randomUUID();
-    lastPromptMessageIdRef.current = promptMessageId;
-
-    if (typeof window !== "undefined" && window.pendo && window.pendo.trackAgent) {
-      window.pendo.trackAgent("prompt", {
-        agentId: PENDO_AGENT_ID,
-        conversationId: conversationIdRef.current,
-        messageId: promptMessageId,
-        content: `Job Description: ${jobDescription}\n\nExperience Summary: ${experienceSummary}`,
-      });
-    }
-
     try {
       const result = await runAnalysis(jobDescription, experienceSummary);
-
-      if (typeof window !== "undefined" && window.pendo && window.pendo.trackAgent) {
-        window.pendo.trackAgent("agent_response", {
-          agentId: PENDO_AGENT_ID,
-          conversationId: conversationIdRef.current,
-          messageId: crypto.randomUUID(),
-          content: JSON.stringify(result),
-        });
-      }
 
       if (user) {
         saveAnalysis(user.id, jobDescription, experienceSummary, result).catch((err) => {
@@ -75,57 +49,29 @@ export default function Dashboard() {
 
       setAnalysisResult(result);
       toast.success("Analysis complete!");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("analysis_completed", {
-          fitScore: result?.fitScore,
-          tag: result?.targetRole && result?.targetCompany
-            ? [result.targetRole, result.targetCompany].join(" ").toLowerCase().includes("design") ? "PRODUCT DESIGN" : "PRODUCT"
-            : undefined,
-          targetRole: result?.targetRole,
-          targetCompany: result?.targetCompany,
-          fitBreakdownCount: result?.fitBreakdown?.length ?? 0,
-          translationsCount: result?.translations?.length ?? 0,
-          gapAnalysisCount: result?.gapAnalysis?.length ?? 0,
-          hasCoverLetter: !!result?.coverLetter,
-          isAuthenticated: !!user,
-          jobDescriptionLength: jobDescription.length,
-          experienceSummaryLength: experienceSummary.length,
-        });
-      }
+      trackEvent("analysis_completed", {
+        fitScore: result?.fitScore,
+        targetRole: result?.targetRole,
+        targetCompany: result?.targetCompany,
+        isAuthenticated: !!user,
+      });
     } catch (error) {
       console.error("Analysis error:", error);
       toast.error(error.message || "Analysis failed. Please try again.");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("analysis_failed", {
-          errorMessage: (error.message || "Unknown error").substring(0, 100),
-          jobDescriptionLength: jobDescription.length,
-          experienceSummaryLength: experienceSummary.length,
-          isAuthenticated: !!user,
-        });
-      }
+      trackEvent("analysis_failed", {
+        errorMessage: (error.message || "").substring(0, 100),
+        isAuthenticated: !!user,
+      });
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  const handleNew = () => {
-    if (typeof window !== "undefined" && window.pendo && window.pendo.trackAgent && lastPromptMessageIdRef.current) {
-      window.pendo.trackAgent("user_reaction", {
-        agentId: PENDO_AGENT_ID,
-        conversationId: conversationIdRef.current,
-        messageId: lastPromptMessageIdRef.current,
-        content: "retry",
-      });
-    }
-
-    setAnalysisResult(null);
-    setJobDescription("");
-    setExperienceSummary("");
-    conversationIdRef.current = crypto.randomUUID();
-    lastPromptMessageIdRef.current = null;
-  };
+  // const handleNew = () => {
+  //   setAnalysisResult(null);
+  //   setJobDescription("");
+  //   setExperienceSummary("");
+  // };
 
   return (
     <main className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center overflow-y-auto px-6 py-10 sm:px-8 pb-20 md:pb-10">
@@ -182,4 +128,13 @@ export default function Dashboard() {
     </main>
   );
 }
+
+
+
+
+
+
+
+
+
 

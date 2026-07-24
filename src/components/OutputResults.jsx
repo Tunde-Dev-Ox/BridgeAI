@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { jsPDF } from "jspdf";
 import { useParams } from "react-router-dom";
 import { updateCoverLetter } from "../services/analyses";
+import { trackEvent } from "../lib/mixpanel";
 
 export default function OutputResults({ data, analysisId }) {
   const { id: routeId } = useParams();
@@ -19,13 +20,7 @@ export default function OutputResults({ data, analysisId }) {
       await navigator.clipboard.writeText(editedLetter);
       setCopied(true);
       toast.success("Cover letter copied to clipboard!");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("cover_letter_copied", {
-          letterLength: editedLetter.length,
-          wasEdited: editedLetter !== (data?.coverLetter ?? ""),
-        });
-      }
+      trackEvent("cover_letter_copied", { letterLength: editedLetter.length });
       if (copiedTimeoutRef.current) clearTimeout(copiedTimeoutRef.current);
       copiedTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -48,13 +43,7 @@ export default function OutputResults({ data, analysisId }) {
       await updateCoverLetter(activeId, editedLetter);
       setIsEditingLetter(false);
       toast.success("Cover letter draft saved");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("cover_letter_draft_saved", {
-          analysisId: activeId,
-          letterLength: editedLetter.length,
-        });
-      }
+      trackEvent("cover_letter_draft_saved", { analysisId: activeId, letterLength: editedLetter.length });
     } catch (error) {
       toast.error(error.message || "Failed to save cover letter");
     }
@@ -104,15 +93,7 @@ export default function OutputResults({ data, analysisId }) {
       const safeName = target.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 50) || "cover_letter";
       doc.save(`${safeName}.pdf`);
       toast.success("Cover letter downloaded as PDF");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("cover_letter_downloaded", {
-          targetRole: data?.targetRole,
-          targetCompany: data?.targetCompany,
-          letterLength: editedLetter.length,
-          wasEdited: editedLetter !== (data?.coverLetter ?? ""),
-        });
-      }
+      trackEvent("cover_letter_downloaded", { letterLength: editedLetter.length });
     } catch (error) {
       console.error("PDF generation error:", error);
       toast.error("Failed to generate PDF");
@@ -139,7 +120,7 @@ export default function OutputResults({ data, analysisId }) {
       <div className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <span className="text-xs uppercase font-bold tracking-widest text-zinc-800">Analysis Complete</span>
-          <h2 className="text-xl font-bold text-zinc-950 mt-1">Bridging Report for {safeTargetCompany}</h2>
+          <h2 className="text-xl font-bold text-zinc-950 mt-1">Fit Report for {safeTargetCompany}</h2>
           <p className="text-xs text-zinc-500 mt-0.5">Role: {safeTargetRole}</p>
         </div>
 
@@ -194,7 +175,7 @@ export default function OutputResults({ data, analysisId }) {
       </div>
 
       {/* Tab Contents */}
-      <div className="p-6 grow overflow-y-auto max-h-[580px]">
+      <div className="p-6 grow overflow-y-auto max-h-145">
         {/* FIT SCORE TAB */}
         {activeTab === "fit" && (
           <div className="space-y-6 animate-fade-in">
@@ -297,7 +278,7 @@ export default function OutputResults({ data, analysisId }) {
                       <span className="absolute top-4 right-4 text-[9px] font-normal text-zinc-800 bg-zinc-800/10 border border-zinc-800/20 px-1.5 py-0.5 rounded uppercase tracking-wider animate-pulse">
                         Global Translation
                       </span>
-                      <h5 className="text-xs font-semibold text-zinc-800 uppercase tracking-wider mb-3">Bridge Translation</h5>
+                      <h5 className="text-xs font-semibold text-zinc-800 uppercase tracking-wider mb-3">Goover's Translation</h5>
                       <p className="text-sm text-zinc-500 font-medium leading-relaxed">
                         "{t.translated}"
                       </p>
@@ -341,8 +322,8 @@ export default function OutputResults({ data, analysisId }) {
                   </p>
 
                   <div className="mt-4 pt-3 border-t border-gray-200 flex items-start flex-col space-x-2">
-                    <span className="text-xs text-emerald-400 uppercase tracking-wider mt-0.5">How to Bridge:</span>
-                    <p className="text-xs text-zinc-600 leading-relaxed font-light max-w-[650px]">{gap.action}</p>
+                    <span className="text-xs text-emerald-400 uppercase tracking-wider mt-0.5">How to Bridge the gap:</span>
+                    <p className="text-xs text-zinc-600 leading-relaxed font-light max-w-162.5">{gap.action}</p>
                   </div>
                 </div>
               ))}

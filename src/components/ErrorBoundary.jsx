@@ -8,7 +8,7 @@ export default function ErrorFallback({ error, resetError }) {
         </p>
         <button
           onClick={() => resetError?.() ?? window.location.reload()}
-          className="px-5 py-2 bg-[#111214] text-white rounded-lg text-sm font-medium cursor-pointer hover:bg-[#111214]/80"
+          className="px-5 py-2 bg-dark text-white rounded-lg text-sm font-medium cursor-pointer hover:bg-dark/80 focus-ring"
         >
           Try again
         </button>

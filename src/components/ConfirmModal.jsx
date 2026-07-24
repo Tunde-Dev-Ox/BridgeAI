@@ -4,10 +4,12 @@ import { useEffect, useRef, useCallback } from "react";
 export default function ConfirmModal({ open, title, message, confirmLabel, onConfirm, onCancel }) {
   const modalRef = useRef(null);
   const confirmBtnRef = useRef(null);
+  const onCancelRef = useRef(onCancel);
+  onCancelRef.current = onCancel;
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === "Escape") {
-      onCancel();
+      onCancelRef.current();
       return;
     }
     if (e.key === "Tab" && modalRef.current) {
@@ -29,7 +31,7 @@ export default function ConfirmModal({ open, title, message, confirmLabel, onCon
         }
       }
     }
-  }, [onCancel]);
+  }, []);
 
   useEffect(() => {
     if (!open) return;

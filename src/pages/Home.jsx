@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FiArrowRight, FiBarChart, FiGlobe, FiTarget, FiFileText, FiLinkedin, FiTwitter, FiChevronDown } from "react-icons/fi";
 import { FaDiscord } from "react-icons/fa";
 import { useAuthModal } from "../context/AuthModalContext";
-import { supabase } from "../supabaseClient";
+// import { supabase } from "../supabaseClient";
 
 const FEATURES = [
   {
@@ -116,7 +116,7 @@ function AccordionItem({ q, a, open, onToggle }) {
         aria-expanded={open}
       >
         <span className="text-sm font-semibold text-zinc-800 pr-4">{q}</span>
-        <FiChevronDown className={`w-4 h-4 text-zinc-400 shrink-0 transition-transform duration-300 ${open ? "rotate-180 text-[#533afd]" : ""}`} />
+        <FiChevronDown className={`w-4 h-4 text-zinc-400 shrink-0 transition-transform duration-300 ${open ? "rotate-180 text-brand" : ""}`} />
       </button>
       <div
         className="overflow-hidden transition-all duration-300 ease-in-out"
@@ -153,14 +153,14 @@ export default function Home() {
             {user ? (
               <Link
                 to="/app"
-                className="px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-[#533afd]/20 transition-all active:scale-[0.97]"
+                className="px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-brand/20 transition-all active:scale-[0.97]"
               >
                 Dashboard
               </Link>
             ) : (
               <button
                 onClick={openAuthModal}
-                className="px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-[#533afd]/20 transition-all active:scale-[0.97] cursor-pointer"
+                className="px-5 py-2.5 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-brand/20 transition-all active:scale-[0.97] cursor-pointer"
               >
                 Get Started
               </button>
@@ -187,16 +187,16 @@ export default function Home() {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight leading-[1.1] max-w-4xl mx-auto animate-fade-in">
             You have the experience.
             <br />
-            <span className="bg-linear-to-r from-brand to-[#3217cb] bg-clip-text text-transparent">Global companies</span> just don't see it yet.
+            <span className="bg-linear-to-r from-brand/20 to-brand bg-clip-text text-transparent">Global companies</span> just don't see it yet.
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: "0.15s" }}>
-            Goover translates your African market product management experience into <span className="text-black">global market language</span>, so you can compete anywhere.
+            Goover translates your African market product management experience into <span className="text-black italic font-semibold">global market language</span>, so you can compete anywhere.
           </p>
           
           <div className="mt-10 flex items-center justify-center gap-4 animate-fade-in max-[540px]:flex-col" style={{ animationDelay: "0.3s" }}>
               <button
                 onClick={openAuthModal}
-                className="px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#533afd]/25 transition-all flex items-center gap-2 text-sm active:scale-[0.97] cursor-pointer"
+                className="px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-brand/25 transition-all flex items-center gap-2 text-sm active:scale-[0.97] cursor-pointer"
               >
                 Try Goover Free
                 <FiArrowRight className="w-4.5 h-4.5" />
@@ -245,12 +245,12 @@ export default function Home() {
               {/* Connection line in desktop viewport */}
               <div className="hidden md:block absolute top-12 left-12 right-12 h-0.5 border-t-2 border-dashed border-zinc-200 z-0" />
               
-              {STEPS.map((step, i) => (
+              {STEPS.map((step) => (
                 <div 
                   key={step.num} 
-                  className="bg-white border border-zinc-200/50 p-8 rounded-2xl shadow-xs transition-all duration-300 hover:border-[#533afd]/30 hover:shadow-md hover:-translate-y-1 relative overflow-hidden group z-10"
+                  className="bg-white border border-zinc-200/50 p-8 rounded-2xl shadow-xs transition-all duration-300 hover:border-brand/30 hover:shadow-md hover:-translate-y-1 relative overflow-hidden group z-10"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-[#533afd]/10 text-brand font-medium text-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-brand/10 text-brand font-medium text-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300">
                     {step.num}
                   </div>
                   <h3 className="text-lg font-semibold mb-3 text-zinc-800 transition-colors">{step.title}</h3>
@@ -280,12 +280,12 @@ export default function Home() {
                 return (
                   <div 
                     key={title} 
-                    className={`${gridSpanClass} bg-white border border-zinc-200/60 p-8 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-[#533afd]/4 hover:border-[#533afd]/40 group overflow-hidden relative`}
+                    className={`${gridSpanClass} bg-white border border-zinc-200/60 p-8 rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-brand/4 hover:border-brand/40 group overflow-hidden relative`}
                   >
                     {/* Glowing background highlights in bento cards */}
-                    <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-[#533afd]/3 blur-2xl group-hover:bg-[#533afd]/8 transition-colors duration-300" />
+                    <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-brand/3 blur-2xl group-hover:bg-brand/8 transition-colors duration-300" />
                     
-                    <div className="w-12 h-12 rounded-xl bg-[#533afd]/8 text-[#533afd] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#533afd]/15 transition-all duration-300">
+                    <div className="w-12 h-12 rounded-xl bg-brand/8 text-brand flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-brand/15 transition-all duration-300">
                       <Icon className="text-xl" />
                     </div>
                     
@@ -324,12 +324,12 @@ export default function Home() {
       </section>
 
       {/* CTA with subtle overlay grid and glowing orb */}
-      <section className="relative bg-[#111214] overflow-hidden" style={{ clipPath: "ellipse(95% 100% at 50% 100%)" }}>
+      <section className="relative bg-dark overflow-hidden" style={{ clipPath: "ellipse(95% 100% at 50% 100%)" }}>
         {/* Subtle grid pattern for texture */}
         <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
         
         {/* Glowing atmospheric background orb */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-[#533afd]/20 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-brand/20 blur-3xl pointer-events-none" />
 
         <div className="py-28 pb-36 px-6 relative z-10">
           <ScrollReveal>
@@ -344,7 +344,7 @@ export default function Home() {
               {user ? (
                 <Link
                   to="/app"
-                  className="mt-8 inline-flex px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-[#533afd]/20 transition-all items-center gap-2 text-sm active:scale-[0.97]"
+                  className="mt-8 inline-flex px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-brand/20 transition-all items-center gap-2 text-sm active:scale-[0.97]"
                 >
                   Go to Dashboard
                   <FiArrowRight className="w-4.5 h-4.5" />
@@ -352,7 +352,7 @@ export default function Home() {
               ) : (
                 <button
                   onClick={openAuthModal}
-                  className="mt-8 inline-flex px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-[#533afd]/20 transition-all items-center gap-2 text-sm active:scale-[0.97] cursor-pointer"
+                  className="mt-8 inline-flex px-7 py-3.5 bg-brand text-white font-semibold rounded-lg hover:bg-brand/90 hover:shadow-lg hover:shadow-brand/20 transition-all items-center gap-2 text-sm active:scale-[0.97] cursor-pointer"
                 >
                   Get Started Free
                   <FiArrowRight className="w-4.5 h-4.5" />
@@ -403,13 +403,13 @@ export default function Home() {
             <div>
               <h4 className="text-xs font-bold text-zinc-800 uppercase tracking-wider mb-4">Connect</h4>
               <div className="flex items-center gap-3">
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-[#533afd] hover:border-[#533afd]/30 hover:bg-[#533afd]/5 transition-all">
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-brand hover:border-brand/30 hover:bg-brand/5 transition-all">
                   <FiLinkedin className="w-4.5 h-4.5" />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-[#533afd] hover:border-[#533afd]/30 hover:bg-[#533afd]/5 transition-all">
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-brand hover:border-brand/30 hover:bg-brand/5 transition-all">
                   <FiTwitter className="w-4.5 h-4.5" />
                 </a>
-                <a href="https://discord.com" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-[#533afd] hover:border-[#533afd]/30 hover:bg-[#533afd]/5 transition-all">
+                <a href="https://discord.com" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="w-10 h-10 rounded-xl border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-brand hover:border-brand/30 hover:bg-brand/5 transition-all">
                   <FaDiscord className="w-4.5 h-4.5" />
                 </a>
               </div>
@@ -418,7 +418,7 @@ export default function Home() {
 
           <div className="mt-14 pt-8 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-zinc-500">&copy; {new Date().getFullYear()} Goover. All rights reserved.</p>
-            <p className="text-sm text-zinc-500">Built by <a href="https://www.linkedin.com/in/josephtunde/" target="_blank" className="text-[#533afd] hover:text-[#533afd]/80 transition-colors underline">Joseph Tunde</a> for Mind The Product World Product Day 2026</p>
+            <p className="text-sm text-zinc-500">Built by <a href="https://www.linkedin.com/in/josephtunde/" target="_blank" className="text-brand hover:text-brand/80 transition-colors underline">Joseph Tunde</a> for Mind The Product World Product Day 2026</p>
           </div>
         </div>
       </footer>

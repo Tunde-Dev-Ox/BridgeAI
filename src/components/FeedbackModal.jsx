@@ -3,6 +3,7 @@ import { FiX, FiAlertCircle, FiStar, FiSend, FiMessageSquare } from "react-icons
 import { toast } from "sonner";
 import { sendFeedback } from "../services/feedback";
 import { useAuthModal } from "../context/AuthModalContext";
+import { trackEvent } from "../lib/mixpanel";
 
 const TYPES = [
   { value: "bug", label: "Bug Report", icon: FiAlertCircle, desc: "Something isn't working right" },
@@ -56,17 +57,8 @@ export default function FeedbackModal({ onClose }) {
         message: message.trim(),
         email: user?.email || undefined,
       });
-      toast.success("Feedback sent! Thanks for helping improve Bridge.");
-
-      if (typeof pendo !== "undefined") {
-        pendo.track("feedback_submitted", {
-          feedbackType: type,
-          subjectLength: subject.trim().length,
-          messageLength: message.trim().length,
-          hasEmail: !!user?.email,
-        });
-      }
-
+      toast.success("Feedback sent! Thanks for helping improve Goover.");
+      trackEvent("feedback_submitted", { feedbackType: type, hasEmail: !!user?.email });
       onClose();
     } catch (error) {
       toast.error(error.message || "Failed to send feedback");
@@ -78,7 +70,7 @@ export default function FeedbackModal({ onClose }) {
   const placeholder =
     type === "bug"
       ? "What happened? What did you expect to happen?"
-      : "Describe your idea and how it would help you in Bridge.";
+      : "Describe your idea and how it would help you in Goover.";
 
   return (
     <div
@@ -94,7 +86,7 @@ export default function FeedbackModal({ onClose }) {
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
           <div className="flex items-center gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-[#111214]">Send Feedback</h2>
+              <h2 className="text-lg font-semibold text-dark">Send Feedback</h2>
               <p className="text-xs text-zinc-500">Help us improve Goover</p>
             </div>
           </div>
@@ -127,7 +119,7 @@ export default function FeedbackModal({ onClose }) {
                     }`}
                   >
                     <Icon className={`text-lg mb-1.5 ${selected ? "text-brand" : "text-zinc-400"}`} />
-                    <p className={`text-sm font-semibold ${selected ? "text-[#111214]" : "text-zinc-600"}`}>
+                    <p className={`text-sm font-semibold ${selected ? "text-dark" : "text-zinc-600"}`}>
                       {t.label}
                     </p>
                     <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">{t.desc}</p>
@@ -180,7 +172,7 @@ export default function FeedbackModal({ onClose }) {
             <button
               type="submit"
               disabled={isLoading || !subject.trim() || !message.trim()}
-              className="px-5 py-2.5 text-sm font-semibold text-white bg-[#111214] hover:bg-[#111214]/90 rounded-xl transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none"
+              className="px-5 py-2.5 text-sm font-semibold text-white bg-dark hover:bg-dark/90 rounded-xl transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none focus-ring"
             >
               {isLoading ? (
                 "Sending..."

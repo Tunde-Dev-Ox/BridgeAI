@@ -12,26 +12,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
     rel="stylesheet">
-  <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="%PUBLIC_URL%/favicon.svg" />
-  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
-  <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
-  <script>
-    (function (apiKey) {
-      (function (p, e, n, d, o) {
-        var v, w, x, y, z; o = p[d] = p[d] || {}; o._q = o._q || [];
-        v = ['initialize', 'identify', 'updateOptions', 'pageLoad', 'track', 'trackAgent']; for (w = 0, x = v.length; w < x; ++w)(function (m) {
-          o[m] = o[m] || function () { o._q[m === v[0] ? 'unshift' : 'push']([m].concat([].slice.call(arguments, 0))); };
-        })(v[w]);
-        y = e.createElement(n); y.async = !0; y.src = 'https://cdn.pendo.io/agent/static/' + apiKey + '/pendo.js';
-        z = e.getElementsByTagName(n)[0]; z.parentNode.insertBefore(y, z);
-      })(window, document, 'script', 'pendo');
-    })('90a0fe3e-7e0e-4f35-bd02-02e3e20b7238');
-  </script>
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
 </head>
 
-<body class="bg-[#090a0b]">
+<body>
   <div id="root"></div>
   <div id="modal-root"></div>
   <script type="module" src="/src/main.jsx"></script>

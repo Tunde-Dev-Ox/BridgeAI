@@ -59,7 +59,7 @@ const sections = [
       "Supabase (supabase.com) — Authentication, database, and file storage.",
       "Claude (claude.ai) — The AI language model that powers Goover.",
       "Sentry (sentry.io) — Error monitoring and crash reporting (no personal data included).",
-      "Novus (novus.pendo.io) - Tracking users interaction with the app.",
+      "Novus — Product analytics.",
       "We never sell your personal information to any third party.",
     ],
   },
@@ -160,9 +160,9 @@ export default function Privacy() {
                   >
                     {line.startsWith("Email:") ? (
                       <>
-                        Email:{" "}
-                        <a href="mailto:privacy@bridgeapp.com" className="text-zinc-900 underline underline-offset-2 hover:text-zinc-600 transition-colors">
-                          privacy@bridgeapp.com
+                        LinkedIn:{" "}
+                        <a href="https://www.linkedin.com/in/goover/" className="text-zinc-900 underline underline-offset-2 hover:text-zinc-600 transition-colors">
+                          Goover
                         </a>
                       </>
                     ) : (

@@ -1,4 +1,5 @@
 import { supabase } from "../supabaseClient";
+import { trackEvent } from "../lib/mixpanel";
 
 const IS_DEV = import.meta.env.DEV;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -8,7 +9,8 @@ async function invokeFunction(body, functionName = "quick-handler") {
     const session = (await supabase.auth.getSession()).data.session;
     const headers = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${session?.access_token ?? ANON_KEY}`,
+      apikey: ANON_KEY,
+      ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
     };
 
     const response = await fetch(`/api/functions/${functionName}`, {
@@ -71,15 +73,12 @@ export async function saveAnalysis(userId, jobDescription, experienceSummary, re
 
   if (error) throw new Error(error.message || "Failed to save analysis");
 
-  if (typeof pendo !== "undefined") {
-    pendo.track("analysis_saved", {
-      userId,
-      fitScore: result.fitScore,
-      tag: inferTag(result),
-      targetRole: result?.targetRole,
-      targetCompany: result?.targetCompany,
-    });
-  }
+  trackEvent("analysis_saved", {
+    fitScore: result.fitScore,
+    tag: inferTag(result),
+    targetRole: result?.targetRole,
+    targetCompany: result?.targetCompany,
+  });
 }
 
 function inferTag(result) {

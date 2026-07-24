@@ -1,13 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { FiChevronRight, FiX, FiCheck } from "react-icons/fi";
 import { IoRocketOutline } from "react-icons/io5";
+import { trackEvent } from "../lib/mixpanel";
 
-const TOUR_STORAGE_KEY = "bridge-tour-done";
+const TOUR_STORAGE_KEY = "goover-tour-done";
 
 const STEPS = [
   {
     id: "welcome",
-    title: "Welcome to Bridge",
+    title: "Welcome to Goover",
     description:
       "Translate your local experience into a language global hiring managers understand instantly. Let's take 30 seconds to get you set up.",
     target: null,
@@ -32,7 +33,7 @@ const STEPS = [
     id: "tools",
     title: "3. Import Content Easily",
     description:
-      "Upload a resume PDF, paste from your clipboard, or fetch a job posting URL — Bridge extracts the text automatically.",
+      "Upload a resume PDF, paste from your clipboard, or fetch a job posting URL — Goover extracts the text automatically.",
     target: '[data-tour="tools"]',
     placement: "top",
   },
@@ -40,7 +41,7 @@ const STEPS = [
     id: "run",
     title: "4. Run the Analysis",
     description:
-      "Hit the run button and Bridge will analyze your fit, identify gaps, generate a tailored cover letter, and translate your experience.",
+      "Hit the run button and Goover will analyze your fit, identify gaps, generate a tailored cover letter, and translate your experience.",
     target: '[data-tour="run-btn"]',
     placement: "left",
   },
@@ -68,14 +69,7 @@ function useTourProgress() {
   });
 
   const dismiss = useCallback(() => {
-    if (typeof pendo !== "undefined") {
-      pendo.track("onboarding_dismissed", {
-        dismissedAtStep: step,
-        dismissedAtStepId: STEPS[step]?.id,
-        totalSteps: STEPS.length,
-      });
-    }
-
+    trackEvent("onboarding_dismissed", { dismissedAtStep: step });
     localStorage.setItem(TOUR_STORAGE_KEY, "true");
     setStep(-1);
   }, [step]);
@@ -85,13 +79,7 @@ function useTourProgress() {
       const nextStep = s + 1;
       if (nextStep >= STEPS.length) {
         localStorage.setItem(TOUR_STORAGE_KEY, "true");
-
-        if (typeof pendo !== "undefined") {
-          pendo.track("onboarding_completed", {
-            totalSteps: STEPS.length,
-          });
-        }
-
+        trackEvent("onboarding_completed", { totalSteps: STEPS.length });
         return -1;
       }
       return nextStep;
@@ -217,7 +205,7 @@ export default function OnboardingTour() {
     };
 
     update();
-    window.addEventListener("scroll", update, { once: true });
+    window.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     return () => {
       window.removeEventListener("scroll", update);
